@@ -20,6 +20,12 @@ spring:
           ssl:
             enable: true
 
+
+# community
+community:
+  path:
+    domain: http://localhost:8080
+
 mybatis:
   mapper-locations: classpath:mapper/*.xml
   type-aliases-package: me.wangao.community.entity
@@ -32,3 +38,6 @@ logging:
     me:
       wangao:
         community: debug
+server:
+  servlet:
+    context-path: /community
