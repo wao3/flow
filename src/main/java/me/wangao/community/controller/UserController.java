@@ -1,5 +1,6 @@
 package me.wangao.community.controller;
 
+import me.wangao.community.annotation.LoginRequired;
 import me.wangao.community.entity.User;
 import me.wangao.community.service.UserService;
 import me.wangao.community.util.CommunityUtil;
@@ -44,11 +45,13 @@ public class UserController {
     @Resource
     private HostHolder hostHolder;
 
+    @LoginRequired
     @GetMapping("/setting")
     public String getSettingPage() {
         return "/site/setting";
     }
 
+    @LoginRequired
     @PostMapping("/upload")
     public String uploadHeader(MultipartFile headerImage, Model model) {
         if(headerImage == null) {
