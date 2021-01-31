@@ -25,6 +25,7 @@ spring:
 community:
   path:
     domain: http://localhost:8080
+    upload: D:/work/data/upload
 
 mybatis:
   mapper-locations: classpath:mapper/*.xml
