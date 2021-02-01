@@ -1,10 +1,7 @@
 package me.wangao.community.dao;
 
 import me.wangao.community.entity.DiscussPost;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -27,4 +24,7 @@ public interface DiscussPostMapper {
             "where id = #{id} "
     })
     DiscussPost selectDiscussPostById(int id);
+
+    @Update("update discuss_post set comment_count = #{commentCount} where id = #{id}")
+    int updateCommentCount(int id, int commentCount);
 }
