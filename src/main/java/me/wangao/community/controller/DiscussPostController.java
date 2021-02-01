@@ -1,9 +1,13 @@
 package me.wangao.community.controller;
 
+import me.wangao.community.entity.Comment;
 import me.wangao.community.entity.DiscussPost;
+import me.wangao.community.entity.Page;
 import me.wangao.community.entity.User;
+import me.wangao.community.service.CommentService;
 import me.wangao.community.service.DiscussPostService;
 import me.wangao.community.service.UserService;
+import me.wangao.community.util.CommunityConstant;
 import me.wangao.community.util.CommunityUtil;
 import me.wangao.community.util.HostHolder;
 import org.springframework.stereotype.Controller;
@@ -11,10 +15,14 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/discuss")
-public class DiscussPostController {
+public class DiscussPostController implements CommunityConstant {
 
     @Resource
     private DiscussPostService discussPostService;
@@ -24,6 +32,9 @@ public class DiscussPostController {
 
     @Resource
     private UserService userService;
+
+    @Resource
+    private CommentService commentService;
 
     @PostMapping("/add")
     @ResponseBody
@@ -44,12 +55,61 @@ public class DiscussPostController {
     }
 
     @GetMapping("/detail/{id}")
-    public String getDiscussPost(@PathVariable int id, Model model) {
+    public String getDiscussPost(@PathVariable int id, Model model, Page page) {
+        // 帖子
         DiscussPost discussPost = discussPostService.findDiscussPostById(id);
         model.addAttribute("post", discussPost);
 
+        // 作者
         User user = userService.findUserById(discussPost.getUserId());
         model.addAttribute("author", user);
+
+        //  评论分页信息
+        page.setLimit(5)
+                .setPath("/discuss/detail/" + id)
+                .setRows(discussPost.getCommentCount());
+
+        List<Comment> commentList = commentService.findCommentsByEntity(ENTITY_TYPE_POST, discussPost.getId(), page.getOffset(), page.getLimit());
+        List<Map<String, Object>> commentVOList = new ArrayList<>();
+        if (commentList != null) {
+            commentList.forEach(comment -> {
+                // 评论VO
+                Map<String, Object> commentVO = new HashMap<>();
+                commentVO.put("comment", comment);
+                commentVO.put("user", userService.findUserById(comment.getUserId()));
+
+                // 查评论的二级评论（回复）
+                List<Comment> replyList = commentService.findCommentsByEntity(
+                        ENTITY_TYPE_COMMENT, comment.getId(), 0, Integer.MAX_VALUE);
+                // 回复VO列表
+                List<Map<String, Object>> replyVOList = new ArrayList<>();
+
+                if(replyList != null) {
+                    replyList.forEach(reply -> {
+                        Map<String, Object> replyVO = new HashMap<>();
+                        replyVO.put("reply", reply);
+                        replyVO.put("user", userService.findUserById(reply.getUserId()));
+                        // 回复的目标
+                        if (reply.getTargetId() != null && reply.getTargetId() != 0) {
+                            User target = userService.findUserById(reply.getTargetId());
+                            replyVO.put("target", target);
+                        } else {
+                            replyVO.put("target", null);
+                        }
+                        replyVOList.add(replyVO);
+                    });
+                }
+
+                commentVO.put("replies", replyVOList);
+
+                int replyCount = commentService.findCommentCount(ENTITY_TYPE_COMMENT, comment.getId());
+                commentVO.put("replyCount", replyCount);
+
+                commentVOList.add(commentVO);
+            });
+        }
+
+        model.addAttribute("comments", commentVOList);
 
         return "/site/discuss-detail";
     }
