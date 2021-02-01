@@ -4,6 +4,7 @@ import me.wangao.community.entity.DiscussPost;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
@@ -19,4 +20,11 @@ public interface DiscussPostMapper {
             "values(#{userId}, #{title}, #{content}, #{type}, #{status}, #{createTime}, #{commentCount}, #{score})"
     })
     int insertDiscussPost(DiscussPost discussPost);
+
+    @Select({
+            "select id, user_id, title, content, type, status, create_time, comment_count, score ",
+            "from discuss_post ",
+            "where id = #{id} "
+    })
+    DiscussPost selectDiscussPostById(int id);
 }

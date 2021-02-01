@@ -3,12 +3,12 @@ package me.wangao.community.controller;
 import me.wangao.community.entity.DiscussPost;
 import me.wangao.community.entity.User;
 import me.wangao.community.service.DiscussPostService;
+import me.wangao.community.service.UserService;
 import me.wangao.community.util.CommunityUtil;
 import me.wangao.community.util.HostHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
@@ -21,6 +21,9 @@ public class DiscussPostController {
 
     @Resource
     private HostHolder hostHolder;
+
+    @Resource
+    private UserService userService;
 
     @PostMapping("/add")
     @ResponseBody
@@ -38,5 +41,16 @@ public class DiscussPostController {
 
         discussPostService.addDiscussPost(post);
         return CommunityUtil.getJSONString(0, "发布成功");
+    }
+
+    @GetMapping("/detail/{id}")
+    public String getDiscussPost(@PathVariable int id, Model model) {
+        DiscussPost discussPost = discussPostService.findDiscussPostById(id);
+        model.addAttribute("post", discussPost);
+
+        User user = userService.findUserById(discussPost.getUserId());
+        model.addAttribute("author", user);
+
+        return "/site/discuss-detail";
     }
 }
