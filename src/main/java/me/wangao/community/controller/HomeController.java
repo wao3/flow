@@ -24,7 +24,7 @@ public class HomeController {
     @Resource
     private UserService userService;
 
-    @GetMapping("/index")
+    @GetMapping({"/", "/index", "/index.html"})
     public String getIndexPage(Model model, Page page) {
         page.setRows(discussPostService.findDiscussPostRows(null));
         page.setPath("/index");
@@ -43,5 +43,10 @@ public class HomeController {
         }
         model.addAttribute("discussPosts", discussPosts);
         return "index";
+    }
+
+    @GetMapping("/error")
+    public String getErrorPage() {
+        return "/error/500";
     }
 }
