@@ -8,6 +8,10 @@
         id, from_id, to_id, conversation_id, content, status, create_time
     </sql>
 
+    <sql id="insertFields">
+        from_id, to_id, conversation_id, content, status, create_time
+    </sql>
+
     <select id="selectConversations" resultType="me.wangao.community.entity.Message">
         select <include refid="selectFields"/> from message
         where id in (
@@ -53,5 +57,17 @@
         </if>
     </select>
 
+    <insert id="insertMessage" parameterType="me.wangao.community.entity.Message" keyProperty="id" useGeneratedKeys="true">
+        insert into message(<include refid="insertFields"/>)
+        values (#{fromId}, #{toId}, #{conversationId}, #{content}, #{status}, #{createTime})
+    </insert>
+
+    <update id="updateStatus">
+        update message set status = #{status}
+        where id in
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
 
 </mapper>

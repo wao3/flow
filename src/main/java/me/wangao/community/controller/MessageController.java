@@ -5,11 +5,14 @@ import me.wangao.community.entity.Page;
 import me.wangao.community.entity.User;
 import me.wangao.community.service.MessageService;
 import me.wangao.community.service.UserService;
+import me.wangao.community.util.CommunityUtil;
 import me.wangao.community.util.HostHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import java.util.*;
@@ -98,9 +101,47 @@ public class MessageController {
                 target = userService.findUserById(message.getFromId());
             }
         }
-
         model.addAttribute("target", target);
 
+        // 将未读消息改为已读
+        List<Integer> unreadLetterIds = getUnreadLetterIds(letterList);
+        if (!unreadLetterIds.isEmpty()) {
+            messageService.readMessage(unreadLetterIds);
+        }
+
         return "/site/letter-detail";
+    }
+
+    private List<Integer> getUnreadLetterIds(List<Message> letterList) {
+        List<Integer> ids = new ArrayList<>();
+        User user = hostHolder.getUser();
+
+        if (letterList != null) {
+            letterList.forEach(letter -> {
+                if (Objects.equals(letter.getToId(), user.getId()) && letter.getStatus() == 0) {
+                    ids.add(letter.getId());
+                }
+            });
+        }
+
+        return ids;
+    }
+
+    @PostMapping("/letter/send")
+    @ResponseBody
+    public String sendLetter(String toName, String content) {
+        User target = userService.findUserByName(toName);
+        if (target == null) {
+            return CommunityUtil.getJSONString(1, "用户不存在");
+        }
+
+        Message message = new Message()
+                .setFromId(hostHolder.getUser().getId())
+                .setToId(target.getId())
+                .setContent(content);
+
+        messageService.addMessage(message);
+
+        return CommunityUtil.getJSONString(0, "发送成功");
     }
 }
