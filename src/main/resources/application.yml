@@ -20,6 +20,12 @@ spring:
           ssl:
             enable: true
 
+  # RedisProperties
+  redis:
+    database: 10
+    host: localhost
+    port: 6379
+
 
 # community
 community:
