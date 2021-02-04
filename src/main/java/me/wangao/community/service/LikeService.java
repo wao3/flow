@@ -1,6 +1,7 @@
 package me.wangao.community.service;
 
 import me.wangao.community.util.RedisKeyUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.redis.core.RedisOperations;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -19,19 +20,19 @@ public class LikeService {
     public void like(int userId, int entityType, int entityId, int entityUserId) {
         redisTemplate.execute(new SessionCallback<Object>() {
             @Override
-            public <K, V> Object execute(RedisOperations<K, V> operations) throws DataAccessException {
+            public Object execute(RedisOperations operations) throws DataAccessException {
                 String entityLikeKey = RedisKeyUtil.getEntityLikeKey(entityType, entityId);
                 String userLikeKey = RedisKeyUtil.getUserLikeKey(entityUserId);
-                Boolean isMember = redisTemplate.opsForSet().isMember(entityLikeKey, userId);
+                Boolean isMember = operations.opsForSet().isMember(entityLikeKey, userId);
 
                 operations.multi();
 
                 if (isMember != null && isMember) {
-                    redisTemplate.opsForSet().remove(entityLikeKey, userId);
-                    redisTemplate.opsForValue().decrement(userLikeKey);
+                    operations.opsForSet().remove(entityLikeKey, userId);
+                    operations.opsForValue().decrement(userLikeKey);
                 } else {
-                    redisTemplate.opsForSet().add(entityLikeKey, userId);
-                    redisTemplate.opsForValue().increment(userLikeKey);
+                    operations.opsForSet().add(entityLikeKey, userId);
+                    operations.opsForValue().increment(userLikeKey);
                 }
 
                 return operations.exec();
