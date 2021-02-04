@@ -2,6 +2,7 @@ package me.wangao.community.controller;
 
 import me.wangao.community.annotation.LoginRequired;
 import me.wangao.community.entity.User;
+import me.wangao.community.service.LikeService;
 import me.wangao.community.service.UserService;
 import me.wangao.community.util.CommunityUtil;
 import me.wangao.community.util.HostHolder;
@@ -44,6 +45,9 @@ public class UserController {
 
     @Resource
     private HostHolder hostHolder;
+
+    @Resource
+    private LikeService likeService;
 
     @LoginRequired
     @GetMapping("/setting")
@@ -107,4 +111,21 @@ public class UserController {
             logger.error("获取头像失败: " + e.getMessage());
         }
     }
+
+    // 个人主页
+    @GetMapping("/profile/{userId}")
+    public String getProfilePage(@PathVariable int userId, Model model) {
+        User user = userService.findUserById(userId);
+        if (user == null) {
+            throw new RuntimeException("该用户不存在");
+        }
+
+        model.addAttribute("user", user);
+        // 点赞数量
+        int likeCount = likeService.findUserLikeCount(userId);
+        model.addAttribute("likeCount", likeCount);
+
+        return "/site/profile";
+    }
+
 }
