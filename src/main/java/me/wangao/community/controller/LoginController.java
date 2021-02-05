@@ -4,10 +4,13 @@ import com.google.code.kaptcha.Producer;
 import me.wangao.community.entity.User;
 import me.wangao.community.service.UserService;
 import me.wangao.community.util.CommunityConstant;
+import me.wangao.community.util.CommunityUtil;
+import me.wangao.community.util.RedisKeyUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +24,7 @@ import javax.servlet.http.HttpSession;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 @Controller
 public class LoginController implements CommunityConstant {
@@ -32,6 +36,9 @@ public class LoginController implements CommunityConstant {
 
     @Resource
     Producer kaptchaProducer;
+
+    @Resource
+    RedisTemplate<String, Object> redisTemplate;
 
     @Value("${server.servlet.context-path}")
     private String contextPath;
@@ -54,7 +61,16 @@ public class LoginController implements CommunityConstant {
         BufferedImage image = kaptchaProducer.createImage(text);
 
         // 将验证码存入session
-        session.setAttribute("captcha", text);
+        // session.setAttribute("captcha", text);
+
+        // 将验证码存入redis
+        String captchaOwner = CommunityUtil.generateUUID();
+        Cookie cookie = new Cookie("captchaOwner", captchaOwner);
+        cookie.setPath(contextPath);
+        res.addCookie(cookie);
+        String captchaKey = RedisKeyUtil.getCaptchaKey(captchaOwner);
+        redisTemplate.opsForValue().set(captchaKey, text, 60, TimeUnit.SECONDS);
+
 
         // 将图片输出给浏览器
         res.setContentType("image/png");
@@ -100,9 +116,16 @@ public class LoginController implements CommunityConstant {
 
     @PostMapping("/login")
     public String login(String username, String password, String captcha, boolean rememberMe,
-                        Model model, HttpSession session, HttpServletResponse res) {
+                        Model model, HttpServletResponse res, @CookieValue String captchaOwner) {
         // 检查验证码
-        String realCaptcha = (String) session.getAttribute("captcha");
+        // String realCaptcha = (String) session.getAttribute("captcha");
+        String realCaptcha = null;
+
+        if (StringUtils.isNotBlank(captchaOwner)) {
+            String captchaKey = RedisKeyUtil.getCaptchaKey(captchaOwner);
+            realCaptcha = (String)redisTemplate.opsForValue().get(captchaKey);
+        }
+
         if (StringUtils.isBlank(realCaptcha) || StringUtils.isBlank(captcha) || !realCaptcha.equalsIgnoreCase(captcha)) {
             model.addAttribute("captchaMsg", "验证码不正确");
             return "/site/login";
