@@ -6,7 +6,7 @@ function follow() {
 	let btn = this;
 	if($(btn).hasClass("btn-info")) {
 		// 关注TA
-		$.post(CONTEXT_PATH + "/follow", { entityType: 3, entityId: $("#entityId").val() }, data => {
+		$.post(CONTEXT_PATH + "/follow", { entityType: 3, entityId: $(btn).next().val() }, data => {
 			data = JSON.parse(data);
 			if (data.code === 0) {
 				location.reload();
@@ -16,7 +16,7 @@ function follow() {
 		})
 	} else {
 		// 取消关注
-		$.post(CONTEXT_PATH + "/unfollow", { entityType: 3, entityId: $("#entityId").val() }, data => {
+		$.post(CONTEXT_PATH + "/unfollow", { entityType: 3, entityId: $(btn).next().val() }, data => {
 			data = JSON.parse(data);
 			if (data.code === 0) {
 				location.reload();
