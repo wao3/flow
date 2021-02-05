@@ -3,6 +3,7 @@ package me.wangao.community.service;
 import me.wangao.community.dao.MessageMapper;
 import me.wangao.community.entity.Message;
 import me.wangao.community.util.SensitiveFilter;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.HtmlUtils;
 
@@ -45,11 +46,14 @@ public class MessageService {
                 .setStatus(0)
                 .setCreateTime(new Date());
 
-        if (message.getFromId() < message.getToId()) {
-            message.setConversationId(message.getFromId() + "_" + message.getToId());
-        } else {
-            message.setConversationId(message.getToId() + "_" + message.getFromId());
+        if (StringUtils.isBlank(message.getConversationId())) {
+            if (message.getFromId() < message.getToId()) {
+                message.setConversationId(message.getFromId() + "_" + message.getToId());
+            } else {
+                message.setConversationId(message.getToId() + "_" + message.getFromId());
+            }
         }
+
         return messageMapper.insertMessage(message);
     }
 

@@ -1,8 +1,10 @@
 package me.wangao.community.controller;
 
 import me.wangao.community.annotation.LoginRequired;
+import me.wangao.community.entity.Event;
 import me.wangao.community.entity.Page;
 import me.wangao.community.entity.User;
+import me.wangao.community.event.EventProducer;
 import me.wangao.community.service.FollowService;
 import me.wangao.community.service.UserService;
 import me.wangao.community.util.CommunityConstant;
@@ -20,7 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
-public class FollowController {
+public class FollowController implements CommunityConstant{
 
     @Resource
     private FollowService followService;
@@ -31,6 +33,9 @@ public class FollowController {
     @Resource
     private UserService userService;
 
+    @Resource
+    private EventProducer eventProducer;
+
     @PostMapping("/follow")
     @ResponseBody
     @LoginRequired
@@ -38,6 +43,14 @@ public class FollowController {
         User user = hostHolder.getUser();
 
         followService.follow(user.getId(), entityType, entityId);
+
+        Event event = new Event()
+                .setTopic(TOPIC_FOLLOW)
+                .setUserId(hostHolder.getUser().getId())
+                .setEntityType(entityType)
+                .setEntityId(entityId)
+                .setEntityUserId(entityId);
+        eventProducer.fireEvent(event);
 
         return CommunityUtil.getJSONString(0, "已关注");
     }
