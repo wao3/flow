@@ -16,6 +16,7 @@ public interface DiscussPostMapper {
             "insert into discuss_post(user_id, title, content, type, status, create_time, comment_count, score) ",
             "values(#{userId}, #{title}, #{content}, #{type}, #{status}, #{createTime}, #{commentCount}, #{score})"
     })
+    @Options(useGeneratedKeys = true, keyProperty = "id")
     int insertDiscussPost(DiscussPost discussPost);
 
     @Select({

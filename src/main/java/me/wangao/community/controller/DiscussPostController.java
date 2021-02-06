@@ -1,9 +1,7 @@
 package me.wangao.community.controller;
 
-import me.wangao.community.entity.Comment;
-import me.wangao.community.entity.DiscussPost;
-import me.wangao.community.entity.Page;
-import me.wangao.community.entity.User;
+import me.wangao.community.entity.*;
+import me.wangao.community.event.EventProducer;
 import me.wangao.community.service.CommentService;
 import me.wangao.community.service.DiscussPostService;
 import me.wangao.community.service.LikeService;
@@ -40,6 +38,9 @@ public class DiscussPostController implements CommunityConstant {
     @Resource
     private LikeService likeService;
 
+    @Resource
+    private EventProducer eventProducer;
+
     @PostMapping("/add")
     @ResponseBody
     public String discussPost(String title, String content) {
@@ -55,6 +56,15 @@ public class DiscussPostController implements CommunityConstant {
                 .setContent(content);
 
         discussPostService.addDiscussPost(post);
+
+        // 触发 elasticsearch 发帖事件
+        Event event = new Event()
+                .setTopic(TOPIC_PUBLISH)
+                .setUserId(user.getId())
+                .setEntityType(ENTITY_TYPE_POST)
+                .setEntityId(post.getId());
+        eventProducer.fireEvent(event);
+
         return CommunityUtil.getJSONString(0, "发布成功");
     }
 

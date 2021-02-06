@@ -54,8 +54,18 @@ public class CommentController implements CommunityConstant {
             Comment target = commentService.findCommentById(comment.getEntityId());
             event.setEntityUserId(target.getUserId());
         }
-
         eventProducer.fireEvent(event);
+
+        // 评论帖子，会修改回帖数量，触发 elasticsearch 修改帖子事件
+        if (comment.getEntityType() == ENTITY_TYPE_POST) {
+            Event updatePostEvent = new Event()
+                    .setTopic(TOPIC_PUBLISH)
+                    .setUserId(comment.getUserId())
+                    .setEntityType(ENTITY_TYPE_POST)
+                    .setEntityId(discussPostId);
+            eventProducer.fireEvent(event);
+        }
+
 
         return "redirect:/discuss/detail/" + discussPostId;
     }
