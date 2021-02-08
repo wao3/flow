@@ -28,4 +28,10 @@ public interface DiscussPostMapper {
 
     @Update("update discuss_post set comment_count = #{commentCount} where id = #{id}")
     int updateCommentCount(int id, int commentCount);
+
+    @Update("update discuss_post set type = #{type} where id = #{id}")
+    int updateType(int id, int type);
+
+    @Update("update discuss_post set status = #{status} where id = #{id}")
+    int updateStatus(int id, int status);
 }

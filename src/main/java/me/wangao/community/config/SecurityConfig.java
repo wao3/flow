@@ -44,6 +44,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements Comm
                         AUTHORITY_ADMIN,
                         AUTHORITY_MODERATOR
                 )
+                .antMatchers("/discuss/top", "/discuss/wonderful").hasAnyAuthority(AUTHORITY_MODERATOR)
+                .antMatchers("/discuss/delete").hasAnyAuthority(AUTHORITY_ADMIN)
                 .anyRequest().permitAll();
 
         // 权限不够时的处理
@@ -52,7 +54,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements Comm
                     // 认证异常处理（没有登录）
                     @Override
                     public void commence(HttpServletRequest req, HttpServletResponse res, AuthenticationException e) throws IOException, ServletException {
-                        String xRequestWith = req.getHeader("x-request-with");
+                        String xRequestWith = req.getHeader("X-Requested-With");
                         if ("XMLHttpRequest".equals(xRequestWith)) {
                             // ajax请求
                             res.setContentType("application/plain; charset=utf-8");
@@ -67,7 +69,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements Comm
                     // 没有权限的异常处理
                     @Override
                     public void handle(HttpServletRequest req, HttpServletResponse res, AccessDeniedException e) throws IOException, ServletException {
-                        String xRequestWith = req.getHeader("x-request-with");
+                        String xRequestWith = req.getHeader("X-Requested-With");
                         if ("XMLHttpRequest".equals(xRequestWith)) {
                             // ajax请求
                             res.setContentType("application/plain; charset=utf-8");
