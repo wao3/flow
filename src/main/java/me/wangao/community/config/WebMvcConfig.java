@@ -1,5 +1,6 @@
 package me.wangao.community.config;
 
+import me.wangao.community.controller.interceptor.DataInterceptor;
 import me.wangao.community.controller.interceptor.LoginRequiredInterceptor;
 import me.wangao.community.controller.interceptor.LoginTicketInterceptor;
 import me.wangao.community.controller.interceptor.MessageInterceptor;
@@ -22,6 +23,9 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Resource
     private MessageInterceptor messageInterceptor;
 
+    @Resource
+    private DataInterceptor dataInterceptor;
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(loginTicketInterceptor)
@@ -31,6 +35,9 @@ public class WebMvcConfig implements WebMvcConfigurer {
 //                .excludePathPatterns("/*/*.css", "/*/*.js", "/*/*.png", "/*/*.jpg", "/*/*.jpeg");
 
         registry.addInterceptor(messageInterceptor)
+                .excludePathPatterns("/*/*.css", "/*/*.js", "/*/*.png", "/*/*.jpg", "/*/*.jpeg");
+
+        registry.addInterceptor(dataInterceptor)
                 .excludePathPatterns("/*/*.css", "/*/*.js", "/*/*.png", "/*/*.jpg", "/*/*.jpeg");
     }
 }
