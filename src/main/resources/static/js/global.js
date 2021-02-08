@@ -1,5 +1,14 @@
  const CONTEXT_PATH = '/community';
 
+ // 发送ajax请求之前，将csrf令牌设置到请求消息头
+ let tmp = $("#csrf");
+ let token = tmp.data("token");
+ let header = tmp.data("header");
+
+ $(document).ajaxSend(function (e, xhr, options) {
+	 xhr.setRequestHeader(header, token);
+ });
+
 window.alert = function(message) {
 	if(!$(".alert-box").length) {
 		$("body").append(
