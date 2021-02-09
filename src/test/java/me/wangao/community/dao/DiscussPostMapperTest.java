@@ -18,11 +18,11 @@ class DiscussPostMapperTest {
 
     @Test
     void selectDiscussPosts() {
-        List<DiscussPost> discussPosts1 = discussPostMapper.selectDiscussPosts(null, 0, 10);
+        List<DiscussPost> discussPosts1 = discussPostMapper.selectDiscussPosts(null, 0, 10, 0);
         discussPosts1.forEach(System.out::println);
 
         System.out.println("===============");
-        List<DiscussPost> discussPosts2 = discussPostMapper.selectDiscussPosts(149, 0, 10);
+        List<DiscussPost> discussPosts2 = discussPostMapper.selectDiscussPosts(149, 0, 10, 0);
         discussPosts2.forEach(System.out::println);
     }
 

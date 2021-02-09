@@ -8,7 +8,7 @@ import java.util.List;
 @Mapper
 public interface DiscussPostMapper {
 
-    List<DiscussPost> selectDiscussPosts(@Param("userId") Integer userId, int offset, int limit);
+    List<DiscussPost> selectDiscussPosts(@Param("userId") Integer userId, int offset, int limit, @Param("orderMode") int orderMode);
 
     int selectDiscussPostRows(@Param("userId") Integer userId);
 
@@ -34,4 +34,7 @@ public interface DiscussPostMapper {
 
     @Update("update discuss_post set status = #{status} where id = #{id}")
     int updateStatus(int id, int status);
+
+    @Update("update discuss_post set score = #{score} where id = #{id}")
+    int updateScore(int id, double score);
 }

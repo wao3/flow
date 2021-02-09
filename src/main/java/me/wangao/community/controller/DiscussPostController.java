@@ -9,6 +9,8 @@ import me.wangao.community.service.UserService;
 import me.wangao.community.util.CommunityConstant;
 import me.wangao.community.util.CommunityUtil;
 import me.wangao.community.util.HostHolder;
+import me.wangao.community.util.RedisKeyUtil;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -41,6 +43,9 @@ public class DiscussPostController implements CommunityConstant {
     @Resource
     private EventProducer eventProducer;
 
+    @Resource
+    private RedisTemplate<String, Object> redisTemplate;
+
     @PostMapping("/add")
     @ResponseBody
     public String discussPost(String title, String content) {
@@ -64,6 +69,10 @@ public class DiscussPostController implements CommunityConstant {
                 .setEntityType(ENTITY_TYPE_POST)
                 .setEntityId(post.getId());
         eventProducer.fireEvent(event);
+
+        // 计算帖子分数
+        String scoreKey = RedisKeyUtil.getPostScoreKey();
+        redisTemplate.opsForSet().add(scoreKey, post.getId());
 
         return CommunityUtil.getJSONString(0, "发布成功");
     }
@@ -197,10 +206,14 @@ public class DiscussPostController implements CommunityConstant {
                 .setEntityId(id);
         eventProducer.fireEvent(event);
 
+        // 计算帖子分数
+        String scoreKey = RedisKeyUtil.getPostScoreKey();
+        redisTemplate.opsForSet().add(scoreKey, id);
+
         return CommunityUtil.getJSONString(0);
     }
 
-    // 置顶
+    // 删除
     @PostMapping("/delete")
     @ResponseBody
     public String setDelete(int id) {

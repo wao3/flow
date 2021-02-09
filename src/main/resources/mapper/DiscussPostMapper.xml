@@ -15,7 +15,12 @@
         <if test="userId != null">
             and user_id = #{userId}
         </if>
-        order by type desc, create_time desc
+        <if test="orderMode == 0">
+            order by type desc, create_time desc
+        </if>
+        <if test="orderMode == 1">
+            order by type desc, score desc, create_time desc
+        </if>
         limit #{offset}, #{limit}
     </select>
 

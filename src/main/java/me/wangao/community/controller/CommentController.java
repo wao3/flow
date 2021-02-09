@@ -8,6 +8,8 @@ import me.wangao.community.service.CommentService;
 import me.wangao.community.service.DiscussPostService;
 import me.wangao.community.util.CommunityConstant;
 import me.wangao.community.util.HostHolder;
+import me.wangao.community.util.RedisKeyUtil;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,6 +33,9 @@ public class CommentController implements CommunityConstant {
 
     @Resource
     private DiscussPostService discussPostService;
+
+    @Resource
+    private RedisTemplate<String, Object> redisTemplate;
 
     @PostMapping("/add/{discussPostId}")
     public String addComment(@PathVariable int discussPostId, Comment comment) {
@@ -64,6 +69,10 @@ public class CommentController implements CommunityConstant {
                     .setEntityType(ENTITY_TYPE_POST)
                     .setEntityId(discussPostId);
             eventProducer.fireEvent(event);
+
+            // 计算帖子分数
+            String scoreKey = RedisKeyUtil.getPostScoreKey();
+            redisTemplate.opsForSet().add(scoreKey, discussPostId);
         }
 
 
