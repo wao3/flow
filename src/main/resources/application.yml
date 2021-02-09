@@ -55,6 +55,7 @@ community:
   path:
     domain: http://localhost:8080
     upload: D:/work/data/upload
+  # 七牛
   qiniu:
     key:
       access: W3XIPmduC_0fs49www8-FB1M-2ecfB1jAUzsbY9o
@@ -63,6 +64,11 @@ community:
       common:
         name: wa-community
         url: http://qo8mnewln.hn-bkt.clouddn.com
+
+caffeine:
+  posts:
+    max-size: 15
+    expire-seconds: 180
 
 mybatis:
   mapper-locations: classpath:mapper/*.xml
