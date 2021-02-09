@@ -55,6 +55,14 @@ community:
   path:
     domain: http://localhost:8080
     upload: D:/work/data/upload
+  qiniu:
+    key:
+      access: W3XIPmduC_0fs49www8-FB1M-2ecfB1jAUzsbY9o
+      secret: zw1K6cw9uCPcLJjvYqhOjhYugK1Io3xVOtPd1wcH
+    bucket:
+      common:
+        name: wa-community
+        url: http://qo8mnewln.hn-bkt.clouddn.com
 
 mybatis:
   mapper-locations: classpath:mapper/*.xml
