@@ -85,3 +85,9 @@ logging:
 server:
   servlet:
     context-path: /community
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
