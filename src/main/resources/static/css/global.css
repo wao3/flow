@@ -3,8 +3,8 @@ html {
 }
 
 body {
-	background: #eee;
-	font-family: arial, STHeiti, 'Microsoft YaHei', \5b8b\4f53;
+	background: #E2E2E2;
+	font-family: arial, STHeiti, 'Microsoft YaHei', \5b8b\4f53, serif;
 	font-size: 14px;
 	height: 100%;
 }
@@ -20,17 +20,50 @@ body {
 	padding: 0;
 }
 
+header {
+	height: 44px;
+	background-color: #ffffff;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04)
+}
+
+header nav {
+	height: 44px;
+	font-size: 15px;
+}
+
 header .navbar-brand {
-	background: url('http://static.nowcoder.com/images/res/logo/logo-v3.png') no-repeat;
-	background-size: 147px 42px;
-	width: 147px;
-	height: 42px;
+	background: url('https://img.wangao.info/flow.png') no-repeat;
+	background-size: 75px 30px;
+	width: 75px;
+	height: 30px;
 	margin: 5px 15px 5px 0;
 }
 
 header .navbar {
 	padding: 5px 0;
-	font-size: 16px;
+}
+
+header .form-control {
+	height: 26px;
+	padding-left: 30px;
+	border-radius: 13px;
+	background-color: #fafafa;
+	border-color: #fafafa;
+}
+
+#search-icon {
+	position: relative;
+	left: 22px;
+}
+
+header .form-control:focus {
+	border-color: #a6a6b0;
+	box-shadow: none;
+}
+
+header .navbar a {
+	font-size: 15px;
+	color: #556;
 }
 
 header .badge {

@@ -15,11 +15,11 @@
 <body>	
 	<div class="nk-container">
 		<!-- 头部 -->
-		<header class="bg-dark sticky-top" th:fragment="header">
+		<header class="sticky-top" th:fragment="header">
 			<em id="csrf" style="display: none" th:data-token="${_csrf.token}" th:data-header="${_csrf.headerName}"></em>
 			<div class="container">
 				<!-- 导航 -->
-				<nav class="navbar navbar-expand-lg navbar-dark">
+				<nav class="navbar navbar-expand-lg">
 					<!-- logo -->
 					<a class="navbar-brand" href="#"></a>
 					<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -27,7 +27,16 @@
 					</button>
 					<!-- 功能 -->
 					<div class="collapse navbar-collapse" id="navbarSupportedContent">
-						<ul class="navbar-nav mr-auto">
+						<!-- 搜索 -->
+						<form class="form-inline my-2 my-lg-0" method="get" th:action="@{/search}">
+							<svg id="search-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#D8D8DC" class="bi bi-search" viewBox="0 0 16 16">
+								<path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+							</svg>
+							<input class="form-control mr-sm-2" type="search" name="keyword" aria-label="Search" th:value="${keyword}"/>
+<!--							<button class="btn btn-outline-light my-2 my-sm-0" type="submit">搜索</button>-->
+						</form>
+						<!-- 菜单 -->
+						<ul class="navbar-nav ml-auto">
 							<li class="nav-item ml-3 btn-group-vertical">
 								<a class="nav-link" th:href="@{/index}">首页</a>
 							</li>
@@ -42,7 +51,7 @@
 							</li>
 							<li class="nav-item ml-3 btn-group-vertical dropdown" th:if="${loginUser!=null}">
 								<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-									<img th:src="${loginUser.headerUrl}" class="rounded-circle" style="width:30px;"/>
+									<img th:src="${loginUser.headerUrl}" class="rounded-circle" style="width:30px; height: 30px"/>
 								</a>
 								<div class="dropdown-menu" aria-labelledby="navbarDropdown">
 									<a class="dropdown-item text-center" th:href="@{|/user/profile/${loginUser.id}|}">个人主页</a>
@@ -53,11 +62,6 @@
 								</div>
 							</li>
 						</ul>
-						<!-- 搜索 -->
-						<form class="form-inline my-2 my-lg-0" method="get" th:action="@{/search}">
-							<input class="form-control mr-sm-2" type="search" name="keyword" aria-label="Search" th:value="${keyword}"/>
-							<button class="btn btn-outline-light my-2 my-sm-0" type="submit">搜索</button>
-						</form>
 					</div>
 				</nav>
 			</div>
