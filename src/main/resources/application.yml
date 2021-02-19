@@ -9,10 +9,10 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   mail:
-    host: smtp.sina.cn
-    port: 465
-    username: typescript@sina.cn
-    password: a644400993bf41b7
+    host: ${mail.host}
+    port: ${mail.port:465}
+    username: ${mail.username}
+    password: ${mail.password}
     protocol: smtps
     properties:
       mail:
@@ -58,12 +58,12 @@ community:
   # 七牛
   qiniu:
     key:
-      access: W3XIPmduC_0fs49www8-FB1M-2ecfB1jAUzsbY9o
-      secret: zw1K6cw9uCPcLJjvYqhOjhYugK1Io3xVOtPd1wcH
+      access: ${qiniu.access}
+      secret: ${qiniu.secret}
     bucket:
       common:
-        name: wa-community
-        url: http://qo8mnewln.hn-bkt.clouddn.com
+        name: ${qiniu.bucket.name}
+        url: ${qiniu.bucket.url}
 
 caffeine:
   posts:
