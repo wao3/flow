@@ -53,7 +53,7 @@ header nav {
 }
 
 header .navbar-brand {
-	background: url('https://img.wangao.info/flow.png') no-repeat;
+	background: url('https://img.wangao.info/flow_200x80.png') no-repeat;
 	background-size: 75px 30px;
 	width: 75px;
 	height: 30px;
@@ -75,6 +75,13 @@ header .form-control {
 #search-icon {
 	position: relative;
 	left: 22px;
+}
+
+.footer-text {
+	line-height: 1.5rem;
+	color: #bdc1c7;
+	padding-right: 0;
+	padding-left: 0;
 }
 
 .post_corner_star {
