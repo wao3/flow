@@ -2,6 +2,28 @@ html {
 	height: 100%;
 }
 
+:root {
+	--box-background-color: #fff;
+	--box-background-alt-color: #f9f9f9;
+	--box-background-hover-color: #fafafa;
+	--box-foreground-color: #000;
+	--box-border-color: #e2e2e2;
+	--box-border-focus-color: #a6a6b0;
+	--box-padding: 10px;
+	--box-border-radius: 3px;
+	--box-font-size: 14px;
+	--box-line-height: 120%;
+	--menu-shadow-color: rgba(0, 0, 0, 0.2);
+	--ads-list-foreground-color: #445;
+	--component-margin: 20px;
+	--link-color: #778087;
+	--link-visited-color: #afb9c1;
+	--link-hover-color: #4d5256;
+	--color-gray: #999;
+	--color-fade: #ccc;
+	--bg-topic: #edf2f7;
+}
+
 body {
 	background: #E2E2E2;
 	font-family: arial, STHeiti, 'Microsoft YaHei', \5b8b\4f53, serif;
@@ -16,7 +38,6 @@ body {
 }
 
 .container {
-	width: 960px;
 	padding: 0;
 }
 
@@ -54,6 +75,153 @@ header .form-control {
 #search-icon {
 	position: relative;
 	left: 22px;
+}
+
+.post_corner_star {
+	background-image: url('https://www.v2ex.com/static/img/corner_star.png');
+	background-repeat: no-repeat;
+	background-size: 20px 20px;
+	background-position: right top;
+}
+
+.post-item {
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+}
+
+.post_info {
+	height: 50px;
+	margin-left: 15px;
+	flex: 1;
+}
+
+.post_info_title {
+	height: 25px;
+}
+
+.post_info_title a {
+	color: #778087;
+}
+
+.post_info_meta {
+	height: 25px;
+	color: #b4bbc5;
+}
+
+.post_info_meta .type {
+	line-height: 20px;
+	padding: 2px 8px;
+	color: #999;
+	background-color: var(--bg-topic);
+	border-radius: 20px;
+}
+
+.post_info_meta .author {
+	color: #99a9bf;
+}
+
+.post_stats {
+	padding: 0 0.5rem;
+	border-radius: 1em;
+	min-width: 1.5rem;
+	background-color: #aab0c6;
+	color: #fff;
+}
+
+#status-box .label {
+	height: 2rem;
+	line-height: 2rem;
+}
+
+#status-box .label .status-l {
+	display: inline-block;
+	text-align: right;
+	color: gray;
+	width: 60px;
+}
+
+#status-box .label .status-r {
+	font-weight: bold;
+}
+
+
+
+a.c-gray {
+	color: gray;
+}
+
+a.c-gray:hover {
+	color: #707070;
+	cursor: pointer;
+}
+
+.c-gray {
+	color: gray;
+}
+
+.c-fade {
+	color: #ccc;
+}
+
+.b-right-fade {
+	border-right: 1px solid #ccc;
+}
+
+img.avatar {
+	object-fit: cover;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+	vertical-align: bottom;
+	width: 48px;
+	height: 48px;
+}
+
+img.avatar.mini {
+	width: 24px;
+	height: 24px;
+}
+
+.box {
+	background-color: #fff;
+	border-radius: 3px;
+	box-shadow: 0 2px 3px rgba(0,0,0,0.1);
+	border-bottom: 1px solid #e2e2e2;
+}
+
+.box .cell {
+	padding: 10px;
+	font-size: 14px;
+	line-height: 150%;
+	text-align: left;
+	border-bottom: 1px solid var(--box-border-color);
+}
+
+.box .cell:first-child {
+	border-top: none;
+	border-top-left-radius: var(--box-border-radius);
+	border-top-right-radius: var(--box-border-radius);
+}
+
+.box .cell:last-child {
+	border-bottom: none;
+	border-bottom-left-radius: var(--box-border-radius);
+	border-bottom-right-radius: var(--box-border-radius);
+}
+
+.row {
+	margin-right: 0;
+	margin-left: 0;
+}
+
+.row .col-3, .row .col-9 {
+	padding-left: 0;
+	padding-right: 0;
+}
+
+.row .col-9 {
+	margin-right: 20px;
+	flex: 1;
 }
 
 header .form-control:focus {
@@ -96,11 +264,6 @@ footer .company-info li {
 .main {
 	padding: 20px 0;
 	padding-bottom: 200px;
-}
-
-.main .container {
-	background: #fff;
-	padding: 20px;
 }
 
 i {
