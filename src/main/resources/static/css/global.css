@@ -31,6 +31,77 @@ body {
 	height: 100%;
 }
 
+.hover-to-show {
+	opacity: 0;
+	transition: opacity 0.2s ease;
+}
+
+.hover-to-show:hover {
+	opacity: 1;
+}
+
+.reply-input {
+	outline: none;
+	border: 1px solid #f0f0f9;
+}
+
+.reply-input:focus {
+	border-color: #a6a6b0;
+}
+
+.post-username {
+	font-size: 15px;
+	color: #626f84;
+}
+
+.inline-reply {
+	background-color: #F6F7F8;
+	border-radius: 3px;
+}
+
+.inline-reply .post-username {
+	font-size: 12px;
+}
+
+.inline-reply .cell {
+	font-size: 12px !important;
+}
+
+.at-item:hover {
+	cursor: pointer;
+}
+
+.at-item {
+	color: var(--color-gray);
+	font-size: 12px;
+	display: inline-block;
+}
+
+.at-item img {
+	height: 15px;
+	width: 15px;
+}
+
+.post_attr {
+	background-color: #F0F0F0;
+	padding: 5px 10px;
+}
+
+.post_stats {
+	color: var(--color-gray);
+	font-size: 12px;
+}
+
+.breadcrumb {
+	background-color: var(--box-background-color);
+	margin-bottom: 0;
+}
+
+.nav-pills .nav-link.active, .nav-pills .show>.nav-link {
+	color: #fff;
+	background-color: #343A40;
+}
+
 .nk-container {
 	position: relative;
 	height: auto;
@@ -128,7 +199,7 @@ header .form-control {
 	color: #99a9bf;
 }
 
-.post_stats {
+.reply_count {
 	padding: 0 0.5rem;
 	border-radius: 1em;
 	min-width: 1.5rem;

@@ -17,68 +17,73 @@
 
 		<!-- 内容 -->
 		<div class="main">
-			<div class="container p-5 mt-3 mb-3">
+			<div class="container mt-1 mb-3">
 				<!-- 上传头像 -->
-				<h6 class="text-left text-info border-bottom pb-2">上传头像</h6>
-				<form class="mt-5" id="uploadForm">
-					<div class="form-group row mt-4">
-						<label for="head-image" class="col-sm-2 col-form-label text-right">选择头像:</label>
-						<div class="col-sm-10">
-							<div class="custom-file">
-								<input type="hidden" name="token" th:value="${uploadToken}">
-								<input type="hidden" name="key" th:value="${fileName}">
-								<input type="file" class="custom-file-input" name="file" id="head-image" lang="es" required="">
-								<div class="invalid-feedback">
-									文件错误
+				<div class="box">
+					<h6 class="cell text-left border-bottom pb-2">上传头像</h6>
+					<form class="cell" id="uploadForm">
+						<div class="form-group row mt-4">
+							<label for="head-image" class="col-sm-2 col-form-label text-right">选择头像:</label>
+							<div class="col-sm-10">
+								<div class="custom-file">
+									<input type="hidden" name="token" th:value="${uploadToken}">
+									<input type="hidden" name="key" th:value="${fileName}">
+									<input type="file" class="custom-file-input" name="file" id="head-image" lang="es" required="">
+									<div class="invalid-feedback">
+										文件错误
+									</div>
+									<label class="custom-file-label" for="head-image" data-browse="文件">选择一张图片</label>
 								</div>
-								<label class="custom-file-label" for="head-image" data-browse="文件">选择一张图片</label>
 							</div>
 						</div>
-					</div>
-					<div class="form-group row mt-4">
-						<div class="col-sm-2"></div>
-						<div class="col-sm-10 text-center">
-							<button type="submit" class="btn btn-info text-white form-control">立即上传</button>
+						<div class="form-group row mt-4">
+							<div class="col-sm-2"></div>
+							<div class="col-sm-10">
+								<button type="submit" class="btn btn-dark text-white">立即上传</button>
+							</div>
 						</div>
-					</div>
-				</form>
+					</form>
+				</div>
+
 				<!-- 修改密码 -->
-				<h6 class="text-left text-info border-bottom pb-2 mt-5">修改密码</h6>
-				<form class="mt-5">				
-					<div class="form-group row mt-4">
-						<label for="old-password" class="col-sm-2 col-form-label text-right">原密码:</label>
-						<div class="col-sm-10">
-							<input type="password" class="form-control" id="old-password" placeholder="请输入原始密码!" required>
-							<div class="invalid-feedback">
-								密码长度不能小于8位!
-							</div>							
+				<div class="box">
+					<h6 class="cell text-left border-bottom pb-2 mt-5">修改密码</h6>
+					<form class="cell">
+						<div class="form-group row mt-4">
+							<label for="old-password" class="col-sm-2 col-form-label text-right">原密码:</label>
+							<div class="col-sm-10">
+								<input type="password" class="form-control" id="old-password" placeholder="请输入原始密码!" required>
+								<div class="invalid-feedback">
+									密码长度不能小于8位!
+								</div>
+							</div>
 						</div>
-					</div>
-					<div class="form-group row mt-4">
-						<label for="new-password" class="col-sm-2 col-form-label text-right">新密码:</label>
-						<div class="col-sm-10">
-							<input type="password" class="form-control" id="new-password" placeholder="请输入新的密码!" required>
-							<div class="invalid-feedback">
-								密码长度不能小于8位!
-							</div>							
+						<div class="form-group row mt-4">
+							<label for="new-password" class="col-sm-2 col-form-label text-right">新密码:</label>
+							<div class="col-sm-10">
+								<input type="password" class="form-control" id="new-password" placeholder="请输入新的密码!" required>
+								<div class="invalid-feedback">
+									密码长度不能小于8位!
+								</div>
+							</div>
 						</div>
-					</div>
-					<div class="form-group row mt-4">
-						<label for="confirm-password" class="col-sm-2 col-form-label text-right">确认密码:</label>
-						<div class="col-sm-10">
-							<input type="password" class="form-control" id="confirm-password" placeholder="再次输入新密码!" required>
-							<div class="invalid-feedback">
-								两次输入的密码不一致!
-							</div>								
+						<div class="form-group row mt-4">
+							<label for="confirm-password" class="col-sm-2 col-form-label text-right">确认密码:</label>
+							<div class="col-sm-10">
+								<input type="password" class="form-control" id="confirm-password" placeholder="再次输入新密码!" required>
+								<div class="invalid-feedback">
+									两次输入的密码不一致!
+								</div>
+							</div>
 						</div>
-					</div>				
-					<div class="form-group row mt-4">
-						<div class="col-sm-2"></div>
-						<div class="col-sm-10 text-center">
-							<button type="submit" class="btn btn-info text-white form-control">立即保存</button>
+						<div class="form-group row mt-4">
+							<div class="col-sm-2"></div>
+							<div class="col-sm-10">
+								<button type="submit" class="btn btn-dark text-white">立即保存</button>
+							</div>
 						</div>
-					</div>
-				</form>				
+					</form>
+				</div>
 			</div>
 		</div>
 

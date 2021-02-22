@@ -21,7 +21,7 @@
 				<!-- 导航 -->
 				<nav class="navbar navbar-expand-lg">
 					<!-- logo -->
-					<a class="navbar-brand" href="#"></a>
+					<a class="navbar-brand" href="#" th:href="@{/}"></a>
 					<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 						<span class="navbar-toggler-icon"></span>
 					</button>
@@ -94,7 +94,7 @@
 										<span class="time" th:text="${#dates.format(map.post.createTime,'MM-dd HH:mm')}">2019-04-15 15:32:18</span>
 									</div>
 								</div>
-								<div class="post_stats" th:text="${map.post.commentCount}">123</div>
+								<div class="reply_count" th:text="${map.post.commentCount}">123</div>
 							</div>
 							<!-- 分页 -->
 							<div class="cell" th:if="${page.rows>0}" th:fragment="pagination">
@@ -119,7 +119,7 @@
 					</div>
 
 					<!-- 左侧 -->
-					<div class="col-3">
+					<div class="col-3" th:fragment="sidebar">
 						<!-- 用户信息栏 -->
 						<div class="box mb-3" th:if="${loginUser!=null}">
 							<div class="cell">

@@ -16,10 +16,10 @@
 
 		<!-- 内容 -->
 		<div class="main">
-			<div class="container">
+			<div class="container box">
 				<!-- 选项 -->
-				<div class="position-relative">
-					<ul class="nav nav-tabs">
+				<div class="cell position-relative">
+					<ul class="nav nav-pills">
 						<li class="nav-item">
 							<a class="nav-link active" href="profile.html">个人信息</a>
 						</li>
@@ -32,8 +32,8 @@
 					</ul>
 				</div>
 				<!-- 个人信息 -->
-				<div class="media mt-5">
-					<img th:src="${user.headerUrl}" class="align-self-start mr-4 rounded-circle" alt="用户头像" style="width:50px;">
+				<div class="cell media">
+					<img th:src="${user.headerUrl}" class="align-self-start mr-4 avatar" alt="用户头像" >
 					<div class="media-body">
 						<h5 class="mt-0 text-warning">
 							<span th:utext="${user.username}">nowcoder</span>
