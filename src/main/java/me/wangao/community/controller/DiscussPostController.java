@@ -92,11 +92,11 @@ public class DiscussPostController implements CommunityConstant {
         model.addAttribute("likeCount", likeCount);
 
         // 点赞状态
-        if (user == null) {
-            model.addAttribute("LikeStatus", 0);
+        if (hostHolder.getUser() == null) {
+            model.addAttribute("likeStatus", 0);
         } else {
-            int LikeStatus = likeService.findEntityLikeStatus(user.getId(), ENTITY_TYPE_POST, id);
-            model.addAttribute("LikeStatus", LikeStatus);
+            int likeStatus = likeService.findEntityLikeStatus(hostHolder.getUser().getId(), ENTITY_TYPE_POST, id);
+            model.addAttribute("likeStatus", likeStatus);
         }
 
 

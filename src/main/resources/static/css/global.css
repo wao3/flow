@@ -40,6 +40,27 @@ body {
 	opacity: 1;
 }
 
+.page-link {
+	color: #343A40;
+}
+
+.page-item.active .page-link {
+	background-color: #343A40;
+	border-color: #343A40;
+}
+
+.list-unstyled, .pagination {
+	margin-bottom: 0;
+}
+
+.reply-link {
+	color: #c8cdd2;
+}
+
+.reply-link:hover {
+	color: #343A40;
+}
+
 .reply-input {
 	outline: none;
 	border: 1px solid #f0f0f9;
@@ -265,6 +286,11 @@ img.avatar.mini {
 	border-radius: 3px;
 	box-shadow: 0 2px 3px rgba(0,0,0,0.1);
 	border-bottom: 1px solid #e2e2e2;
+}
+
+.cell.touch:hover {
+	background-color: #F5F6F8;
+	cursor: pointer;
 }
 
 .box .cell {

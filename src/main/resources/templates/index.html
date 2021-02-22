@@ -75,7 +75,11 @@
 								<button type="button" class="btn btn-dark btn-sm float-right" data-toggle="modal" data-target="#publishModal">发布新主题</button>
 							</div>
 							<!-- 帖子列表 -->
-							<div th:class="|cell post-item ${map.post.type==1?'post_corner_star':''}|" th:each="map:${discussPosts}">
+							<div
+									th:class="|cell touch post-item ${map.post.type==1?'post_corner_star':''}|"
+									th:each="map:${discussPosts}"
+									th:onclick="|go('/discuss/detail/${map.post.id}')|"
+							>
 								<a th:href="@{|/user/profile/${map.user.id}|}">
 									<img th:src="${map.user.headerUrl}" src="" class="avatar" alt="用户头像" style="width:50px;height:50px;">
 								</a>

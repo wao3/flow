@@ -41,3 +41,7 @@ window.alert = function(message) {
 	$(".alert-box .modal-body p").text(message);
 	$(".alert-box").modal("show");
 }
+
+function go(url) {
+	window.location.href = CONTEXT_PATH + url;
+}
