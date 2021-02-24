@@ -1,4 +1,4 @@
- const CONTEXT_PATH = '/community';
+ const CONTEXT_PATH = '';
 
  // 发送ajax请求之前，将csrf令牌设置到请求消息头
  let tmp = $("#csrf");

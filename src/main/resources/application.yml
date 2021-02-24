@@ -84,7 +84,7 @@ logging:
         community: debug
 server:
   servlet:
-    context-path: /community
+    context-path: /
 
 management:
   endpoints:
