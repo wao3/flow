@@ -17,20 +17,20 @@
 
 		<!-- 内容 -->
 		<div class="main">
-			<div class="container">
-				<div class="row">
-					<div class="col-8">
-						<h6><b class="square"></b> 系统通知</h6>
+			<div class="container box">
+				<div class="d-flex cell justify-content-between align-items-center">
+					<div>
+						<div class="c-gray">系统通知</div>
 					</div>
-					<div class="col-4 text-right">
+					<div>
 						<button type="button" class="btn btn-secondary btn-sm" onclick="back();">返回</button>
 					</div>
 				</div>
 				
 				<!-- 通知列表 -->
-				<ul class="list-unstyled mt-4">
-					<li class="media pb-3 pt-3 mb-2" th:each="map:${notices}">
-						<img th:src="${map.fromUser.headerUrl}" class="mr-4 rounded-circle user-header" alt="系统图标">
+				<ul class="cell list-unstyled">
+					<li class="media m-2" th:each="map:${notices}">
+						<img th:src="${map.fromUser.headerUrl}" class="mr-4 rounded-circle user-header" alt="系统图标" src="">
 						<div class="toast show d-lg-block" role="alert" aria-live="assertive" aria-atomic="true">
 							<div class="toast-header">
 								<strong class="mr-auto" th:utext="${map.fromUser.username}">落基山脉下的闲人</strong>

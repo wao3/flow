@@ -17,74 +17,29 @@
 
 		<!-- 内容 -->
 		<div class="main">
-			<div class="container">
-				<div class="row">
-					<div class="col-8">
-						<h6><b class="square"></b> 来自 <i class="text-success" th:utext="${target.username}">落基山脉下的闲人</i> 的私信</h6>
+			<div class="container box">
+				<div class="d-flex cell justify-content-between align-items-center">
+					<div>
+						<div class="c-fade mt-0"> 来自 <i class="post-username" th:utext="${target.username}">落基山脉下的闲人</i> 的私信</div>
 					</div>
-					<div class="col-4 text-right">
+					<div>
 						<button type="button" class="btn btn-secondary btn-sm" onclick="back();">返回</button>
-						<button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#sendModal">给TA私信</button>
+						<button type="button" class="btn btn-dark btn-sm" data-toggle="modal" data-target="#sendModal">给TA私信</button>
 					</div>
 				</div>
-				<!-- 弹出框 -->
-				<div class="modal fade" id="sendModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-					<div class="modal-dialog modal-lg" role="document">
-						<div class="modal-content">
-							<div class="modal-header">
-								<h5 class="modal-title" id="exampleModalLabel">发私信</h5>
-								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-									<span aria-hidden="true">&times;</span>
-								</button>
-							</div>
-							<div class="modal-body">
-								<form>
-									<div class="form-group">
-										<label for="recipient-name" class="col-form-label">发给：</label>
-										<input type="text" class="form-control" id="recipient-name" th:value="${target.username}">
-									</div>
-									<div class="form-group">
-										<label for="message-text" class="col-form-label">内容：</label>
-										<textarea class="form-control" id="message-text" rows="10"></textarea>
-									</div>
-								</form>
-							</div>
-							<div class="modal-footer">
-								<button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
-								<button type="button" class="btn btn-primary" id="sendBtn">发送</button>
-							</div>
-						</div>
-					</div>
-				</div>
-				<!-- 提示框 -->
-				<div class="modal fade" id="hintModal" tabindex="-1" role="dialog" aria-labelledby="hintModalLabel" aria-hidden="true">
-					<div class="modal-dialog modal-lg" role="document">
-						<div class="modal-content">
-							<div class="modal-header">
-								<h5 class="modal-title" id="hintModalLabel">提示</h5>
-							</div>
-							<div class="modal-body" id="hintBody">
-								发送完毕!
-							</div>
-						</div>
-					</div>
-				</div>						
-				
+
 				<!-- 私信列表 -->
-				<ul class="list-unstyled mt-4">
-					<li class="media pb-3 pt-3 mb-2" th:each="map:${letters}">
+				<ul class="cell list-unstyled">
+					<li th:class="|media m-2 d-flex ${isMe ? 'flex-md-row-reverse': ''}|" th:each="map:${letters}" th:with="isMe = ${map.fromUser.username == loginUser.username}">
 						<a href="profile.html">
-							<img th:src="${map.fromUser.headerUrl}" class="mr-4 rounded-circle user-header" alt="用户头像" >
+							<img th:src="${map.fromUser.headerUrl}" class="mr-2 ml-2 rounded-circle user-header" alt="用户头像" >
 						</a>
 						<div class="toast show d-lg-block" role="alert" aria-live="assertive" aria-atomic="true">
-							<div class="toast-header">
-								<strong class="mr-auto" th:utext="${map.fromUser.username}">落基山脉下的闲人</strong>
-								<small th:text="${#dates.format(map.letter.createTime, 'yyyy-MM-dd HH:mm:ss')}">2019-04-25 15:49:32</small>
-								<button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
-									<span aria-hidden="true">&times;</span>
-								</button>
+							<div th:class="|toast-header d-flex justify-content-between ${isMe ? 'flex-md-row-reverse': ''}|">
+								<strong th:utext="${map.fromUser.username}">落基山脉下的闲人</strong>
+								<small class="c-fade" th:text="${#dates.format(map.letter.createTime, 'yyyy-MM-dd HH:mm:ss')}">2019-04-25 15:49:32</small>
 							</div>
-							<div class="toast-body" th:utext="${map.letter.content}">
+							<div th:class="|toast-body d-flex ${isMe ? 'flex-md-row-reverse': ''}|" th:utext="${map.letter.content}">
 								君不见, 黄河之水天上来, 奔流到海不复回!
 							</div>
 						</div>
@@ -104,6 +59,48 @@
 						<li class="page-item"><a class="page-link" href="#">末页</a></li>
 					</ul>
 				</nav>
+			</div>
+		</div>
+		<!-- 弹出框 -->
+		<div class="modal fade" id="sendModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+			<div class="modal-dialog modal-lg" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="exampleModalLabel">发私信</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<form>
+							<div class="form-group">
+								<label for="recipient-name" class="col-form-label">发给：</label>
+								<input type="text" class="form-control" id="recipient-name" th:value="${target.username}">
+							</div>
+							<div class="form-group">
+								<label for="message-text" class="col-form-label">内容：</label>
+								<textarea class="form-control" id="message-text" rows="10"></textarea>
+							</div>
+						</form>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+						<button type="button" class="btn btn-dark" id="sendBtn">发送</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- 提示框 -->
+		<div class="modal fade" id="hintModal" tabindex="-1" role="dialog" aria-labelledby="hintModalLabel" aria-hidden="true">
+			<div class="modal-dialog modal-lg" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="hintModalLabel">提示</h5>
+					</div>
+					<div class="modal-body" id="hintBody">
+						发送完毕!
+					</div>
+				</div>
 			</div>
 		</div>
 
