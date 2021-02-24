@@ -13,18 +13,22 @@ public interface DiscussPostMapper {
     int selectDiscussPostRows(@Param("userId") Integer userId);
 
     @Insert({
-            "insert into discuss_post(user_id, title, content, type, status, create_time, comment_count, score) ",
-            "values(#{userId}, #{title}, #{content}, #{type}, #{status}, #{createTime}, #{commentCount}, #{score})"
+            "insert into discuss_post(user_id, node_id, title, content, type, status, create_time, comment_count, score) ",
+            "values(#{userId}, #{node_id}, #{title}, #{content}, #{type}, #{status}, #{createTime}, #{commentCount}, #{score})"
     })
     @Options(useGeneratedKeys = true, keyProperty = "id")
     int insertDiscussPost(DiscussPost discussPost);
 
     @Select({
-            "select id, user_id, title, content, type, status, create_time, comment_count, score ",
+            "select id, user_id, node_id, title, content, type, status, create_time, comment_count, score ",
             "from discuss_post ",
             "where id = #{id} "
     })
     DiscussPost selectDiscussPostById(int id);
+
+    List<DiscussPost> selectDiscussPostsByNodeId(@Param("nodeId") int nodeId, @Param("offset") int offset, @Param("limit") int limit);
+
+    int selectRowsByNodeId(int nodeId);
 
     @Update("update discuss_post set comment_count = #{commentCount} where id = #{id}")
     int updateCommentCount(int id, int commentCount);

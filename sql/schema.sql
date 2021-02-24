@@ -55,6 +55,7 @@ DROP TABLE IF EXISTS `discuss_post`;
 create table `discuss_post` (
     `id` int primary key not null auto_increment,
     `user_id` varchar(45) not null,
+    `node_id` int not null default 1,
     `title` varchar(255) not null,
     `content` text,
     `type` int default 0 comment '0-普通; 1-置顶',
@@ -75,3 +76,11 @@ CREATE TABLE `login_ticket` (
     PRIMARY KEY (`id`),
     KEY `index_ticket` (`ticket`(20))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `node`;
+CREATE TABLE `node` (
+    `id` int NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    `name` varchar(32) not null unique comment '节点名',
+    `desc` varchar(255) default null comment '节点描述',
+    key idx_name(`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 comment '节点';

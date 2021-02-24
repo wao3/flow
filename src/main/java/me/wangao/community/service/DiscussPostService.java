@@ -101,6 +101,14 @@ public class DiscussPostService {
         return discussPostMapper.selectDiscussPostRows(userId);
     }
 
+    public List<DiscussPost> findDiscussPostByNodeId(int nodeId, int offset, int limit) {
+        return discussPostMapper.selectDiscussPostsByNodeId(nodeId, offset, limit);
+    }
+
+    public int findDiscussPostRowsByNodeId(int nodeId) {
+        return discussPostMapper.selectRowsByNodeId(nodeId);
+    }
+
     public int addDiscussPost(DiscussPost post) {
         if (post == null) {
             throw new IllegalArgumentException("参数不能为空");

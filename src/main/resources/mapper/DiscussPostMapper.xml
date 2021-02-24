@@ -5,7 +5,7 @@
 <mapper namespace="me.wangao.community.dao.DiscussPostMapper">
 
     <sql id="selectFields">
-        id, user_id, title, content, type, status, create_time, comment_count, score
+        id, user_id, node_id, title, content, type, status, create_time, comment_count, score
     </sql>
 
     <select id="selectDiscussPosts" resultType="me.wangao.community.entity.DiscussPost">
@@ -31,5 +31,19 @@
         <if test="userId != null and userId != 0">
             and user_id = #{userId}
         </if>
+    </select>
+
+    <select id="selectDiscussPostsByNodeId" resultType="me.wangao.community.entity.DiscussPost">
+        select <include refid="selectFields"/>
+        from discuss_post
+        where status != 2 and node_id = #{nodeId}
+        order by type desc, create_time desc
+        limit #{offset}, #{limit}
+    </select>
+
+    <select id="selectRowsByNodeId" resultType="java.lang.Integer">
+        select count(id)
+        from discuss_post
+        where status != 2 and node_id = #{nodeId}
     </select>
 </mapper>

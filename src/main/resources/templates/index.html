@@ -70,8 +70,9 @@
 						<div class="box">
 							<div class="cell">
 								<!-- 筛选条件 -->
-								<a th:href="@{/index(orderMode=0)}" type="button" th:class="|btn btn-sm ${orderMode==0?'btn-dark':'btn-light'}|" class="btn btn-light btn-sm">最新</a>
+								<a th:href="@{/index(orderMode=0)}" type="button" th:class="|btn btn-sm ${orderMode==0?'btn-dark':'btn-light'}|" class="btn btn-light btn-sm">社区首页</a>
 								<a th:href="@{/index(orderMode=1)}" type="button" th:class="|btn btn-sm ${orderMode==1?'btn-dark':'btn-light'}|" class="btn btn-light btn-sm">最热</a>
+								<a th:each="node:${nodes}" th:text="${node.name}" th:href="@{|/node/${node.id}|}" type="button" th:class="|btn btn-sm ${nodeId != null && node.id==nodeId?'btn-dark':'btn-light'}|" class="btn btn-light btn-sm">节点</a>
 								<button type="button" class="btn btn-dark btn-sm float-right" data-toggle="modal" data-target="#publishModal">发布新主题</button>
 							</div>
 							<!-- 帖子列表 -->
@@ -93,7 +94,7 @@
 											<img th:src="@{/img/like.svg}" height="12" width="12" src="" alt="">
 											<span th:text="${map.likeCount}">11</span>
 										</span>
-										<span class="type mr-2">奇思妙想</span>
+										<span class="type mr-2" th:text="${map.nodeName}" th:onclick="|go('/node/${map.post.nodeId}')|">奇思妙想</span>
 										<span class="author mr-2" th:utext="${map.user.username}">寒江雪</span>
 										<span class="time" th:text="${#dates.format(map.post.createTime,'MM-dd HH:mm')}">2019-04-15 15:32:18</span>
 									</div>
