@@ -63,7 +63,9 @@ create table `discuss_post` (
     `create_time` timestamp default null,
     `comment_count` int default 0,
     `score` double default null,
-    key `index_user_id` (`user_id`)
+    key `index_user_id` (`user_id`),
+    key `node_id` (`node_id`),
+    key `type_and_create_time`(`type`, `create_time`)
 )engine = InnoDB default charset = utf8;
 
 DROP TABLE IF EXISTS `login_ticket`;

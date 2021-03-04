@@ -16,18 +16,18 @@
 
 		<!-- 内容 -->
 		<div class="main">
-			<div class="container">
-				<div class="position-relative">
+			<div class="container box">
+				<div class="position-relative cell d-flex justify-content-between align-items-center">
 					<!-- 选项 -->
-					<ul class="nav nav-tabs mb-3">
+					<ul class="nav nav-pills">
 						<li class="nav-item">
 							<a class="nav-link position-relative" th:href="@{|/followees/${user.id}|}">
-								<i class="text-info" th:utext="${user.username}">Nowcoder</i> 关注的人
+								<i style="font-weight: bold" th:utext="${user.username}">Nowcoder</i> 关注的人
 							</a>
 						</li>
 						<li class="nav-item">
 							<a class="nav-link position-relative active" th:href="@{|/followers/${user.id}|}">
-								关注 <i class="text-info" th:utext="${user.username}">Nowcoder</i> 的人
+								关注 <i style="font-weight: bold" th:utext="${user.username}">Nowcoder</i> 的人
 							</a>
 						</li>
 					</ul>
@@ -36,7 +36,7 @@
 				
 				<!-- 粉丝列表 -->
 				<ul class="list-unstyled">
-					<li class="media pb-3 pt-3 mb-3 border-bottom position-relative" th:each="map:${users}">
+					<li class="cell media border-bottom position-relative" th:each="map:${users}">
 						<a th:href="@{|/user/profile/${map.user.id}|}">
 							<img th:src="${map.user.headerUrl}" class="mr-4 rounded-circle user-header" alt="用户头像" >
 						</a>
@@ -49,7 +49,7 @@
 							</h6>
 							<div>
 								<button type="button"
-										th:class="|btn btn-sm float-right mr-5 follow-btn ${map.hasFollowed?'btn-secondary':'btn-info'}|"
+										th:class="|btn btn-sm float-right follow-btn ${map.hasFollowed?'btn-secondary':'btn-info'}|"
 										th:if="${loginUser != null && loginUser.id != map.user.id}"
 										th:text="${map.hasFollowed?'已关注':'关注TA'}">关注TA</button>
 								<input type="hidden" th:value="${map.user.id}">
