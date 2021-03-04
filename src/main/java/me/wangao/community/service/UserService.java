@@ -45,6 +45,9 @@ public class UserService implements CommunityConstant {
     @Resource
     private RedisTemplate<String, Object> redisTemplate;
 
+    @Resource
+    private CounterService counterService;
+
 //    @Resource
 //    LoginTicketMapper loginTicketMapper;
 
@@ -101,6 +104,7 @@ public class UserService implements CommunityConstant {
                 .setCreateTime(new Date());
 
         userMapper.insertUser(user);
+        counterService.incr(RedisKeyUtil.getUserCounterKey());
 
         // 激活邮件
         Context context = new Context();

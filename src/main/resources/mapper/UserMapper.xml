@@ -47,4 +47,8 @@
         from user
         where email= #{email}
     </select>
+
+    <select id="selectRows" resultType="java.lang.Integer">
+        select count(1) from user
+    </select>
 </mapper>

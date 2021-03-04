@@ -4,10 +4,7 @@ import me.wangao.community.entity.DiscussPost;
 import me.wangao.community.entity.Node;
 import me.wangao.community.entity.Page;
 import me.wangao.community.entity.User;
-import me.wangao.community.service.DiscussPostService;
-import me.wangao.community.service.LikeService;
-import me.wangao.community.service.NodeService;
-import me.wangao.community.service.UserService;
+import me.wangao.community.service.*;
 import me.wangao.community.util.CommunityConstant;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -36,6 +33,9 @@ public class HomeController implements CommunityConstant {
     @Resource
     private NodeService nodeService;
 
+    @Resource
+    private CounterService counterService;
+
     @GetMapping({"/", "/index", "/index.html"})
     public String getIndexPage(Model model, Page page, @RequestParam(name = "orderMode", defaultValue = "0") int orderMode) {
         page.setRows(discussPostService.findDiscussPostRows(null));
@@ -50,7 +50,19 @@ public class HomeController implements CommunityConstant {
         List<Node> nodes = nodeService.findAllNodes();
         model.addAttribute("nodes", nodes);
 
+        setCounter(model, counterService);
+
         return "index";
+    }
+
+    /** 获取并设置侧边计数器 */
+    static void setCounter(Model model, CounterService counterService) {
+        int userCount = counterService.getUserCount();
+        int commentCount = counterService.getCommentCount();
+        int postCount = counterService.getPostCount();
+        model.addAttribute("userCount", userCount);
+        model.addAttribute("commentCount", commentCount);
+        model.addAttribute("postCount", postCount);
     }
 
     @GetMapping("/node/{id}")

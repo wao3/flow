@@ -36,4 +36,7 @@
         values (#{userId}, #{entityType}, #{entityId}, #{targetId}, #{content}, #{status}, #{createTime})
     </insert>
 
+    <select id="selectRows" resultType="java.lang.Integer">
+        select count(1) from comment;
+    </select>
 </mapper>

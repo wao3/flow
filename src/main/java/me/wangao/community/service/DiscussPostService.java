@@ -5,6 +5,8 @@ import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.LoadingCache;
 import me.wangao.community.dao.DiscussPostMapper;
 import me.wangao.community.entity.DiscussPost;
+import me.wangao.community.util.CommunityConstant;
+import me.wangao.community.util.RedisKeyUtil;
 import me.wangao.community.util.SensitiveFilter;
 import org.apache.commons.lang3.StringUtils;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -22,7 +24,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @Service
-public class DiscussPostService {
+public class DiscussPostService implements CommunityConstant {
 
     private static final Logger logger = LoggerFactory.getLogger(DiscussPostService.class);
 
@@ -31,6 +33,9 @@ public class DiscussPostService {
 
     @Resource
     private SensitiveFilter sensitiveFilter;
+
+    @Resource
+    private CounterService counterService;
 
     @Value("${caffeine.posts.max-size}")
     private int maxSize;
@@ -41,9 +46,6 @@ public class DiscussPostService {
     // 帖子列表缓存
     private LoadingCache<String, List<DiscussPost>> postListCache;
 
-    // 帖子总数缓存
-    private LoadingCache<Integer, Integer> postRowsCache;
-
     @PostConstruct
     public void init() {
         // 初始化帖子列表缓存
@@ -52,7 +54,7 @@ public class DiscussPostService {
                 .expireAfterWrite(expireSeconds, TimeUnit.SECONDS)
                 .build(new CacheLoader<String, List<DiscussPost>>() {
                     @Override
-                    public @Nullable List<DiscussPost> load(@NonNull String key) throws Exception {
+                    public @Nullable List<DiscussPost> load(@NonNull String key) {
                         if (StringUtils.isBlank(key)) {
                             throw new IllegalArgumentException("参数错误");
                         }
@@ -70,17 +72,6 @@ public class DiscussPostService {
                         return discussPostMapper.selectDiscussPosts(null, offset, limit, 1);
                     }
                 });
-        // 初始化帖子总数缓存
-        postRowsCache = Caffeine.newBuilder()
-                .maximumSize(maxSize)
-                .expireAfterWrite(expireSeconds, TimeUnit.SECONDS)
-                .build(new CacheLoader<Integer, Integer>() {
-                    @Override
-                    public @Nullable Integer load(@NonNull Integer integer) throws Exception {
-                        logger.debug("load post rows from DB.");
-                        return discussPostMapper.selectDiscussPostRows(integer);
-                    }
-                });
     }
 
     public List<DiscussPost> findDiscussPosts(Integer userId, int offset, int limit, int orderMode) {
@@ -94,8 +85,7 @@ public class DiscussPostService {
 
     public int findDiscussPostRows(Integer userId) {
         if (userId == null) {
-            Integer rows = postRowsCache.get(0);
-            return rows == null ? 0 : rows;
+            return counterService.count(RedisKeyUtil.getPostCounterKey());
         }
         logger.debug("load post rows from db.");
         return discussPostMapper.selectDiscussPostRows(userId);
@@ -106,7 +96,7 @@ public class DiscussPostService {
     }
 
     public int findDiscussPostRowsByNodeId(int nodeId) {
-        return discussPostMapper.selectRowsByNodeId(nodeId);
+        return counterService.getNodePostCount(nodeId);
     }
 
     public int addDiscussPost(DiscussPost post) {
@@ -127,6 +117,10 @@ public class DiscussPostService {
                 .setCommentCount(0)
                 .setScore(0.);
 
+        // 更新计数器
+        counterService.incr(RedisKeyUtil.getPostScoreKey());
+        counterService.incr(RedisKeyUtil.getNodePostCounterKey(post.getNodeId()));
+
         return discussPostMapper.insertDiscussPost(post);
     }
 
@@ -143,6 +137,13 @@ public class DiscussPostService {
     }
 
     public int updateStatus(int id, int status) {
+        DiscussPost post = discussPostMapper.selectDiscussPostById(id);
+        if (post == null) return 0;
+
+        if (status == POST_STATUS_DELETED) {
+            counterService.decr(RedisKeyUtil.getPostScoreKey());
+            counterService.decr(RedisKeyUtil.getNodePostCounterKey(post.getNodeId()));
+        }
         return discussPostMapper.updateStatus(id, status);
     }
 

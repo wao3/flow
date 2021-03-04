@@ -1,7 +1,5 @@
 package me.wangao.community.util;
 
-import java.util.StringJoiner;
-
 public class RedisKeyUtil {
 
     private static final String SPLIT = ":";
@@ -15,6 +13,12 @@ public class RedisKeyUtil {
     private static final String PREFIX_UV = "uv";
     private static final String PREFIX_DAU = "dau";
     private static final String PREFIX_POST = "post";
+    private static final String PREFIX_COUNTER = "counter";
+
+    private static final String COUNTER_KEY_USER = "user";
+    private static final String COUNTER_KEY_POST = "post";
+    private static final String COUNTER_KEY_COMMENT = "comment";
+    private static final String COUNTER_KEY_NODE_TOPIC = COUNTER_KEY_POST + SPLIT + "node";
 
     // 某个实体的赞
     // like:entity:entityType:entityId -> set<userId>
@@ -78,5 +82,25 @@ public class RedisKeyUtil {
     // 统计帖子分数
     public static String getPostScoreKey() {
         return PREFIX_POST + SPLIT + "score";
+    }
+
+    // 用户计数器
+    public static String getUserCounterKey() {
+        return PREFIX_COUNTER + SPLIT + COUNTER_KEY_USER;
+    }
+
+    // 话题计数器
+    public static String getPostCounterKey() {
+        return PREFIX_COUNTER + SPLIT + COUNTER_KEY_POST;
+    }
+
+    // 回复计数器
+    public static String getCommentCounterKey() {
+        return PREFIX_COUNTER + SPLIT + COUNTER_KEY_COMMENT;
+    }
+
+    // 节点话题计数器
+    public static String getNodePostCounterKey(int nodeId) {
+        return PREFIX_COUNTER + SPLIT + COUNTER_KEY_NODE_TOPIC + SPLIT + nodeId;
     }
 }

@@ -53,4 +53,19 @@ public interface CommunityConstant {
     // 权限：版主
     String AUTHORITY_MODERATOR = "moderator";
 
+    // 帖子状态：正常
+    int POST_STATUS_NORMAL = 0;
+
+    // 帖子状态：精华
+    int POST_STATUS_HIGHLIGHT = 1;
+
+    // 帖子状态：拉黑
+    int POST_STATUS_DELETED = 2;
+
+    // 帖子类型：普通
+    int POST_TYPE_NORMAL = 0;
+
+    // 帖子类型：置顶
+    int POST_TYPE_TOP = 1;
+
 }

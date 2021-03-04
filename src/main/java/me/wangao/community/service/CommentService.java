@@ -3,6 +3,7 @@ package me.wangao.community.service;
 import me.wangao.community.dao.CommentMapper;
 import me.wangao.community.entity.Comment;
 import me.wangao.community.util.CommunityConstant;
+import me.wangao.community.util.RedisKeyUtil;
 import me.wangao.community.util.SensitiveFilter;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -24,6 +25,9 @@ public class CommentService implements CommunityConstant {
 
     @Resource
     private DiscussPostService discussPostService;
+
+    @Resource
+    private CounterService counterService;
 
     public List<Comment> findCommentsByEntity(int entityType, int entityId, int offset, int limit) {
         return commentMapper.selectCommentByEntity(entityType, entityId, offset, limit);
@@ -50,6 +54,9 @@ public class CommentService implements CommunityConstant {
             int count = commentMapper.selectCountByEntity(comment.getEntityType(), comment.getEntityId());
             discussPostService.updateCommentCount(comment.getEntityId(), count);
         }
+
+        // 更新计数器
+        counterService.incr(RedisKeyUtil.getCommentCounterKey());
 
         return rows;
     }
