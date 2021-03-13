@@ -29,7 +29,7 @@ public class QuartzConfig {
         factoryBean.setJobDetail(postScoreRefreshJobDetail);
         factoryBean.setName("postScoreRefreshTrigger");
         factoryBean.setGroup("communityTriggerGroup");
-        factoryBean.setRepeatInterval(1000 * 60); // 暂时设置为1分钟执行1次
+        factoryBean.setRepeatInterval(1000 * 60 * 5); // 暂时设置为5分钟执行1次
         factoryBean.setJobDataAsMap(new JobDataMap());
         return factoryBean;
     }

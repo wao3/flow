@@ -75,7 +75,7 @@ public class EventConsumer implements CommunityConstant {
     }
 
     // 消费删帖事件
-    @KafkaListener(topics = {TOPIC_PUBLISH})
+    @KafkaListener(topics = {TOPIC_DELETE})
     public void handleDeleteMessage(ConsumerRecord<String, String> record) {
         Event event;
         if ((event = dealRecord(record)) == null) return;

@@ -14,6 +14,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.HtmlUtils;
 
@@ -45,6 +46,12 @@ public class DiscussPostService implements CommunityConstant {
 
     // 帖子列表缓存
     private LoadingCache<String, List<DiscussPost>> postListCache;
+
+    @Resource
+    private NodeService nodeService;
+
+    @Resource
+    private RedisTemplate<String, Object> redisTemplate;
 
     @PostConstruct
     public void init() {
@@ -103,6 +110,12 @@ public class DiscussPostService implements CommunityConstant {
         if (post == null) {
             throw new IllegalArgumentException("参数不能为空");
         }
+        if (StringUtils.isBlank(post.getTitle())) {
+            throw new IllegalArgumentException("标题不能为空");
+        }
+        if (post.getNodeId() == null || nodeService.findNodeById(post.getNodeId()) == null) {
+            throw new IllegalArgumentException("请选择正确的节点");
+        }
 
         // 转义HTML标记
         post.setTitle(HtmlUtils.htmlEscape(post.getTitle()))
@@ -118,8 +131,14 @@ public class DiscussPostService implements CommunityConstant {
                 .setScore(0.);
 
         // 更新计数器
-        counterService.incr(RedisKeyUtil.getPostScoreKey());
+        counterService.incr(RedisKeyUtil.getPostCounterKey());
         counterService.incr(RedisKeyUtil.getNodePostCounterKey(post.getNodeId()));
+
+        // 计算帖子分数
+        String scoreKey = RedisKeyUtil.getPostScoreKey();
+        redisTemplate
+                .opsForSet()
+                .add(scoreKey, post.getId());
 
         return discussPostMapper.insertDiscussPost(post);
     }
@@ -143,7 +162,12 @@ public class DiscussPostService implements CommunityConstant {
         if (status == POST_STATUS_DELETED) {
             counterService.decr(RedisKeyUtil.getPostScoreKey());
             counterService.decr(RedisKeyUtil.getNodePostCounterKey(post.getNodeId()));
+        } else {
+            // 计算帖子分数
+            String scoreKey = RedisKeyUtil.getPostScoreKey();
+            redisTemplate.opsForSet().add(scoreKey, id);
         }
+
         return discussPostMapper.updateStatus(id, status);
     }
 

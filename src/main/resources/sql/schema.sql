@@ -1,8 +1,8 @@
-create database community;
+create database if not exists flow;
 
-use community;
+use flow;
 
-SET character_set_client = utf8mb4 ;
+SET character_set_client = utf8mb4;
 
 DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
@@ -15,7 +15,7 @@ CREATE TABLE `user` (
     `status` int(11) DEFAULT NULL COMMENT '0-未激活; 1-已激活;',
     `activation_code` varchar(100) DEFAULT NULL,
     `header_url` varchar(200) DEFAULT NULL,
-    `create_time` timestamp NULL DEFAULT NULL,
+    `create_time` timestamp NULL DEFAULT NOW(),
     PRIMARY KEY (`id`),
     KEY `index_username` (`username`(20)),
     KEY `index_email` (`email`(20))
@@ -29,7 +29,7 @@ CREATE TABLE `message` (
     `conversation_id` varchar(45) NOT NULL,
     `content` text,
     `status` int(11) DEFAULT NULL COMMENT '0-未读;1-已读;2-删除;',
-    `create_time` timestamp NULL DEFAULT NULL,
+    `create_time` timestamp NULL DEFAULT NOW(),
     PRIMARY KEY (`id`),
     KEY `index_from_id` (`from_id`),
     KEY `index_to_id` (`to_id`),
@@ -45,7 +45,7 @@ CREATE TABLE `comment` (
     `target_id` int(11) DEFAULT NULL,
     `content` text,
     `status` int(11) DEFAULT NULL,
-    `create_time` timestamp NULL DEFAULT NULL,
+    `create_time` timestamp NULL DEFAULT NOW(),
     PRIMARY KEY (`id`),
     KEY `index_user_id` (`user_id`) /*!80000 INVISIBLE */,
     KEY `index_entity_id` (`entity_id`)
@@ -60,7 +60,7 @@ create table `discuss_post` (
     `content` text,
     `type` int default 0 comment '0-普通; 1-置顶',
     `status` int default 0 comment '0-正常; 1-精华; 2-拉黑',
-    `create_time` timestamp default null,
+    `create_time` timestamp default NOW(),
     `comment_count` int default 0,
     `score` double default null,
     key `index_user_id` (`user_id`),

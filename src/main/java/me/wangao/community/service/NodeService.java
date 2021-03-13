@@ -13,7 +13,7 @@ public class NodeService {
     @Resource
     private NodeMapper nodeMapper;
 
-    public Node findCommentById(int id) {
+    public Node findNodeById(int id) {
         return nodeMapper.selectById(id);
     }
 

@@ -2,8 +2,10 @@ package me.wangao.community;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.data.redis.core.RedisTemplate;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 
 @SpringBootApplication
 public class CommunityApplication {

@@ -2,14 +2,12 @@ package me.wangao.community.controller;
 
 import me.wangao.community.entity.*;
 import me.wangao.community.event.EventProducer;
-import me.wangao.community.service.CommentService;
-import me.wangao.community.service.DiscussPostService;
-import me.wangao.community.service.LikeService;
-import me.wangao.community.service.UserService;
+import me.wangao.community.service.*;
 import me.wangao.community.util.CommunityConstant;
 import me.wangao.community.util.CommunityUtil;
 import me.wangao.community.util.HostHolder;
 import me.wangao.community.util.RedisKeyUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -48,7 +46,7 @@ public class DiscussPostController implements CommunityConstant {
 
     @PostMapping("/add")
     @ResponseBody
-    public String discussPost(String title, String content) {
+    public String discussPost(String title, String content, Integer nodeId) {
         User user = hostHolder.getUser();
 
         if (user == null) {
@@ -56,6 +54,7 @@ public class DiscussPostController implements CommunityConstant {
         }
 
         DiscussPost post = new DiscussPost()
+                .setNodeId(nodeId)
                 .setUserId(user.getId())
                 .setTitle(title)
                 .setContent(content);
@@ -69,10 +68,6 @@ public class DiscussPostController implements CommunityConstant {
                 .setEntityType(ENTITY_TYPE_POST)
                 .setEntityId(post.getId());
         eventProducer.fireEvent(event);
-
-        // 计算帖子分数
-        String scoreKey = RedisKeyUtil.getPostScoreKey();
-        redisTemplate.opsForSet().add(scoreKey, post.getId());
 
         return CommunityUtil.getJSONString(0, "发布成功");
     }
@@ -205,10 +200,6 @@ public class DiscussPostController implements CommunityConstant {
                 .setEntityType(ENTITY_TYPE_POST)
                 .setEntityId(id);
         eventProducer.fireEvent(event);
-
-        // 计算帖子分数
-        String scoreKey = RedisKeyUtil.getPostScoreKey();
-        redisTemplate.opsForSet().add(scoreKey, id);
 
         return CommunityUtil.getJSONString(0);
     }

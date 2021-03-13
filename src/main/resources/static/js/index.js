@@ -8,11 +8,12 @@ function publish() {
 	// 获取标题内容
 	let title = $("#recipient-name").val();
 	let content = $("#message-text").val();
+	let nodeId = $("#select-node").val();
 
 	// 异步发送
 	$.post(
 		CONTEXT_PATH + "/discuss/add",
-		{ title, content },
+		{ title, content, nodeId },
 		function (data) {
 			data = JSON.parse(data);
 			// 在提示框中显示返回消息

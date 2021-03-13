@@ -96,10 +96,10 @@ public class HomeController implements CommunityConstant {
                 long likeCount = likeService.findEntityLikeCount(ENTITY_TYPE_POST, post.getId());
                 map.put("likeCount", likeCount);
 
-                Node node;
-                do {
-                    node = nodeService.findCommentById(post.getNodeId());
-                } while (node == null);
+                Node node = nodeService.findNodeById(post.getNodeId());
+//                do {
+//                    node = nodeService.findNodeById(post.getNodeId());
+//                } while (node == null);
                 map.put("nodeName", node.getName());
 
                 discussPosts.add(map);

@@ -14,7 +14,7 @@ public interface DiscussPostMapper {
 
     @Insert({
             "insert into discuss_post(user_id, node_id, title, content, type, status, create_time, comment_count, score) ",
-            "values(#{userId}, #{node_id}, #{title}, #{content}, #{type}, #{status}, #{createTime}, #{commentCount}, #{score})"
+            "values(#{userId}, #{nodeId}, #{title}, #{content}, #{type}, #{status}, #{createTime}, #{commentCount}, #{score})"
     })
     @Options(useGeneratedKeys = true, keyProperty = "id")
     int insertDiscussPost(DiscussPost discussPost);
