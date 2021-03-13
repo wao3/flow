@@ -41,6 +41,9 @@ public interface CommunityConstant {
     // 主题：删帖
     String TOPIC_DELETE = "delete";
 
+    // 主题：邮件
+    String TOPIC_EMAIL = "sendEmail";
+
     // 系统用户的ID
     int SYSTEM_USER_ID = 1;
 

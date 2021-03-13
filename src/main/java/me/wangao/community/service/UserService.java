@@ -2,8 +2,10 @@ package me.wangao.community.service;
 
 import me.wangao.community.dao.LoginTicketMapper;
 import me.wangao.community.dao.UserMapper;
+import me.wangao.community.entity.Event;
 import me.wangao.community.entity.LoginTicket;
 import me.wangao.community.entity.User;
+import me.wangao.community.event.EventProducer;
 import me.wangao.community.util.CommunityConstant;
 import me.wangao.community.util.CommunityUtil;
 import me.wangao.community.util.MailClient;
@@ -32,6 +34,9 @@ public class UserService implements CommunityConstant {
 
     @Resource
     private MailClient mailClient;
+
+    @Resource
+    private EventProducer eventProducer;
 
     @Resource
     private TemplateEngine templateEngine;
@@ -100,7 +105,7 @@ public class UserService implements CommunityConstant {
                 .setType(0)
                 .setStatus(0)
                 .setActivationCode(CommunityUtil.generateUUID())
-                .setHeaderUrl(String.format("http://images.nowcoder.com/head/%dt.png", new Random().nextInt(1000)))
+                .setHeaderUrl(String.format("http://flow-img.waoyun.top/avatar/%d.svg", new Random().nextInt(1000)))
                 .setCreateTime(new Date());
 
         userMapper.insertUser(user);
@@ -110,10 +115,16 @@ public class UserService implements CommunityConstant {
         Context context = new Context();
         context.setVariable("email", user.getEmail());
         // http://localhost:8080/user/activation/{id}/{code}
-        String url = domain + contextPath + "/activation/" + user.getId() + "/" + user.getActivationCode();
+        String activation = "/".equals(contextPath) ? "activation/" : "/activation/";
+        String url = domain + contextPath + activation + user.getId() + "/" + user.getActivationCode();
         context.setVariable("url", url);
         String emailContent = templateEngine.process("/mail/activation", context);
-        mailClient.sendMail(user.getEmail(), "激活账号", emailContent);
+        // 发送邮件事件
+        Event sendEmailEvent = new Event().setTopic(TOPIC_EMAIL)
+                .setData("to", user.getEmail())
+                .setData("subject", "激活账号")
+                .setData("content", emailContent);
+        eventProducer.fireEvent(sendEmailEvent);
 
         return map;
     }
