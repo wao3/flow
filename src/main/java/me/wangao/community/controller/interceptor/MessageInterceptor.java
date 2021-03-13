@@ -1,7 +1,11 @@
 package me.wangao.community.controller.interceptor;
 
 import me.wangao.community.entity.User;
+import me.wangao.community.service.FollowService;
+import me.wangao.community.service.LikeService;
 import me.wangao.community.service.MessageService;
+import me.wangao.community.service.UserService;
+import me.wangao.community.util.CommunityConstant;
 import me.wangao.community.util.HostHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -12,7 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @Component
-public class MessageInterceptor implements HandlerInterceptor {
+public class MessageInterceptor implements HandlerInterceptor, CommunityConstant {
 
     @Resource
     private HostHolder hostHolder;
@@ -20,13 +24,32 @@ public class MessageInterceptor implements HandlerInterceptor {
     @Resource
     private MessageService messageService;
 
+    @Resource
+    private LikeService likeService;
+
+    @Resource
+    private FollowService followService;
+
     @Override
     public void postHandle(HttpServletRequest req, HttpServletResponse res, Object handler, ModelAndView modelAndView) throws Exception {
         User user = hostHolder.getUser();
         if (user != null && modelAndView != null) {
-            int letterUnreadCount = messageService.findLetterUnreadCount(user.getId(), null);
-            int noticeUnreadCount = messageService.findNoticeUnreadCount(user.getId(), null);
+            int userId = user.getId();
+            int letterUnreadCount = messageService.findLetterUnreadCount(userId, null);
+            int noticeUnreadCount = messageService.findNoticeUnreadCount(userId, null);
             modelAndView.addObject("allUnreadCount", letterUnreadCount + noticeUnreadCount);
+
+            // 点赞数量
+            int likeCount = likeService.findUserLikeCount(userId);
+            modelAndView.addObject("myLikeCount", likeCount);
+
+            // 关注数量
+            long followeeCount = followService.findFolloweeCount(userId, ENTITY_TYPE_USER);
+            modelAndView.addObject("myFolloweeCount", followeeCount);
+
+            // 粉丝数量
+            long followerCount = followService.findFollowerCount(ENTITY_TYPE_USER, userId);
+            modelAndView.addObject("myFollowerCount", followerCount);
         }
     }
 }

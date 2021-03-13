@@ -134,28 +134,28 @@
 								</div>
 								<!-- 用户状态栏 -->
 								<div class="d-flex mt-2">
-									<a class="flex-grow-1 text-center dark b-right-fade">
-										<div class="c-gray">
+									<a class="flex-grow-1 text-center dark b-right-fade" th:href="@{|/followees/${loginUser.id}|}">
+										<div class="c-gray" th:text="${myFolloweeCount}">
 											123
 										</div>
 										<div class="c-fade">
-											测试
+											关注
 										</div>
 									</a>
-									<a class="flex-grow-1 text-center dark b-right-fade">
-										<div class="c-gray">
+									<a class="flex-grow-1 text-center dark b-right-fade" th:href="@{|/followers/${loginUser.id}|}">
+										<div class="c-gray" th:text="${myFollowerCount}">
 											123
 										</div>
 										<div class="c-fade">
-											测试
+											粉丝
 										</div>
 									</a>
-									<a class="flex-grow-1 text-center dark">
-										<div class="c-gray">
+									<a class="flex-grow-1 text-center dark" style="cursor: default">
+										<div class="c-gray" th:text="${myLikeCount}">
 											123
 										</div>
 										<div class="c-fade">
-											测试
+											获赞
 										</div>
 									</a>
 								</div>
