@@ -47,9 +47,9 @@ LOCK TABLES `user` WRITE;
 INSERT INTO `user`(id, username, password, salt, email, type, status, activation_code, header_url, create_time)
 VALUES (1, 'SYSTEM', 'SYSTEM', 'SYSTEM', 'system@sina.com', 0, 1, NULL, 'http://flow-img.waoyun.top/notify.png',
         '2021-02-13 02:11:03'),
-       (2, 'su', '57ee1345597f3bb1d50054c299cca0f7', 'su', 'su@flow.com', 0, 1, NULL, 'http://flow-img.waoyun.top/avatar/0.svg',
+       (2, 'su', '57ee1345597f3bb1d50054c299cca0f7', 'su', 'su@flow.com', 1, 1, NULL, 'http://flow-img.waoyun.top/avatar/0.svg',
         '2021-02-13 02:11:03'),
-       (3, 'admin', 'f6fdffe48c908deb0f4c3bd36c032e72', 'admin', 'admin@flow.com', 0, 1, NULL, 'http://flow-img.waoyun.top/avatar/1.svg',
+       (3, 'admin', 'f6fdffe48c908deb0f4c3bd36c032e72', 'admin', 'admin@flow.com', 2, 1, NULL, 'http://flow-img.waoyun.top/avatar/1.svg',
         '2021-02-13 02:11:03');
 /*!40000 ALTER TABLE `user`
     ENABLE KEYS */;
