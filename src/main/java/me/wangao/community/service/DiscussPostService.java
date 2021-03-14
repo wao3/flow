@@ -160,7 +160,7 @@ public class DiscussPostService implements CommunityConstant {
         if (post == null) return 0;
 
         if (status == POST_STATUS_DELETED) {
-            counterService.decr(RedisKeyUtil.getPostScoreKey());
+            counterService.decr(RedisKeyUtil.getPostCounterKey());
             counterService.decr(RedisKeyUtil.getNodePostCounterKey(post.getNodeId()));
         } else {
             // 计算帖子分数
