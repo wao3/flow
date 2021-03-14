@@ -174,4 +174,8 @@ public class DiscussPostService implements CommunityConstant {
     public int updateScore(int id, double score) {
         return discussPostMapper.updateScore(id, score);
     }
+    
+    public long findPostView(int postId) {
+        return redisTemplate.opsForHash().increment(RedisKeyUtil.getPostViewCounterKey(), String.valueOf(postId), 1);
+    }
 }

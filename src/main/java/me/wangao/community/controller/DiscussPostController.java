@@ -94,6 +94,10 @@ public class DiscussPostController implements CommunityConstant {
             model.addAttribute("likeStatus", likeStatus);
         }
 
+        // 获取浏览次数
+        long viewCount = discussPostService.findPostView(id);
+        model.addAttribute("viewCount", viewCount);
+
 
         //  评论分页信息
         page.setLimit(5)

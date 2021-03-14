@@ -20,6 +20,9 @@ public class RedisKeyUtil {
     private static final String COUNTER_KEY_COMMENT = "comment";
     private static final String COUNTER_KEY_NODE_TOPIC = COUNTER_KEY_POST + SPLIT + "node";
 
+    private static final String COUNTER_ALL = "all";
+    private static final String COUNTER_VIEW = "view";
+
     // 某个实体的赞
     // like:entity:entityType:entityId -> set<userId>
     public static String getEntityLikeKey(int entityType, int entityId) {
@@ -84,23 +87,28 @@ public class RedisKeyUtil {
         return PREFIX_POST + SPLIT + "score";
     }
 
-    // 用户计数器
+    // 全站用户计数器
     public static String getUserCounterKey() {
-        return PREFIX_COUNTER + SPLIT + COUNTER_KEY_USER;
+        return PREFIX_COUNTER + SPLIT + COUNTER_KEY_USER + SPLIT + COUNTER_ALL;
     }
 
-    // 话题计数器
+    // 全站话题计数器
     public static String getPostCounterKey() {
-        return PREFIX_COUNTER + SPLIT + COUNTER_KEY_POST;
+        return PREFIX_COUNTER + SPLIT + COUNTER_KEY_POST + SPLIT + COUNTER_ALL;
     }
 
-    // 回复计数器
+    // 全站回复计数器
     public static String getCommentCounterKey() {
-        return PREFIX_COUNTER + SPLIT + COUNTER_KEY_COMMENT;
+        return PREFIX_COUNTER + SPLIT + COUNTER_KEY_COMMENT + SPLIT + COUNTER_ALL;
     }
 
     // 节点话题计数器
     public static String getNodePostCounterKey(int nodeId) {
         return PREFIX_COUNTER + SPLIT + COUNTER_KEY_NODE_TOPIC + SPLIT + nodeId;
+    }
+
+    // 帖子浏览量计数器
+    public static String getPostViewCounterKey() {
+        return PREFIX_COUNTER + SPLIT + COUNTER_KEY_POST + SPLIT + COUNTER_VIEW;
     }
 }

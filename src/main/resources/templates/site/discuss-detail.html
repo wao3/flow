@@ -47,7 +47,7 @@
                                 </div>
                                 <div>
                                     <img th:src="@{/img/trend.svg}" class="mr-1" src="" alt="" height="15" width="15">
-                                    <span>共149次查看</span>
+                                    <span>共<i th:text="${viewCount}"></i>次查看</span>
                                 </div>
                             </div>
                         </div>
@@ -223,7 +223,7 @@
                     <form class="cell replyform" method="post" th:action="@{|/comment/add/${post.id}|}">
                         <p>
                             <a name="replyform"></a>
-                            <textarea name="content" class="reply-input p-2" placeholder="在这里畅所欲言你的看法吧!"></textarea>
+                            <textarea name="content" class="reply-input p-2" placeholder="说说你的想法!"></textarea>
                             <input type="hidden" name="entityType" value="1">
                             <input type="hidden" name="entityId" th:value="${post.id}">
                         </p>
