@@ -12,8 +12,9 @@ $(() => {
     $(`#uv-submit`).click(count('uv'));
     $(`#dau-submit`).click(count('dau'));
 
+
     initData('uv');
-    initData('dau');
+    setTimeout(() => initData('dau'), 100);
 
     function count(type) {
         type = type.toString().toLowerCase();

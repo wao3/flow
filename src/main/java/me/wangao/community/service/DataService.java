@@ -10,6 +10,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -19,11 +20,11 @@ public class DataService {
     @Resource
     private RedisTemplate<String, Object> redisTemplate;
 
-    private final SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
+    private static final ThreadLocal<DateFormat> df = ThreadLocal.withInitial(() -> new SimpleDateFormat("yyyyMMdd"));
 
     // 将指定IP计入UV
     public void recordUV(String ip) {
-        String key = RedisKeyUtil.getUVKey(df.format(new Date()));
+        String key = RedisKeyUtil.getUVKey(df.get().format(new Date()));
         redisTemplate.opsForHyperLogLog().add(key, ip);
     }
 
@@ -36,13 +37,13 @@ public class DataService {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(start);
         while (!calendar.getTime().after(end)) {
-            String key = RedisKeyUtil.getUVKey(df.format(calendar.getTime()));
+            String key = RedisKeyUtil.getUVKey(df.get().format(calendar.getTime()));
             keyList.add(key);
             calendar.add(Calendar.DATE, 1);
         }
 
         // 合并数据
-        String redisKey = RedisKeyUtil.getDAUKey(df.format(start), df.format(end));
+        String redisKey = RedisKeyUtil.getDAUKey(df.get().format(start), df.get().format(end));
         redisTemplate.opsForHyperLogLog().union(redisKey, keyList.toArray(new String[0]));
 
         // 返回统计结果
@@ -56,7 +57,7 @@ public class DataService {
         if (userId < 0) {
             throw new IllegalArgumentException("userId 错误");
         }
-        String dauKey = RedisKeyUtil.getDAUKey(df.format(new Date()));
+        String dauKey = RedisKeyUtil.getDAUKey(df.get().format(new Date()));
         redisTemplate.opsForValue().setBit(dauKey, userId, true);
     }
 
@@ -68,12 +69,12 @@ public class DataService {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(start);
         while (!calendar.getTime().after(end)) {
-            String key = RedisKeyUtil.getDAUKey(df.format(calendar.getTime()));
+            String key = RedisKeyUtil.getDAUKey(df.get().format(calendar.getTime()));
             keyList.add(key.getBytes());
             calendar.add(Calendar.DATE, 1);
         }
 
-        String rangeKey = RedisKeyUtil.getDAUKey(df.format(start), df.format(end));
+        String rangeKey = RedisKeyUtil.getDAUKey(df.get().format(start), df.get().format(end));
         // 进行or运算
         Long count = redisTemplate.execute(new RedisCallback<Long>() {
             @Override
@@ -104,7 +105,7 @@ public class DataService {
 
         while (!calendar.getTime().after(end)) {
             Map<String, Object> day = new HashMap<>();
-            String key = RedisKeyUtil.getUVKey(df.format(calendar.getTime()));
+            String key = RedisKeyUtil.getUVKey(df.get().format(calendar.getTime()));
             // 获取该日的UV
             long count = redisTemplate.opsForHyperLogLog().size(key);
 
@@ -136,7 +137,7 @@ public class DataService {
 
         while (!calendar.getTime().after(end)) {
             Map<String, Object> day = new HashMap<>();
-            String key = RedisKeyUtil.getDAUKey(df.format(calendar.getTime()));
+            String key = RedisKeyUtil.getDAUKey(df.get().format(calendar.getTime()));
             // 获取该日的DAU
             Long countBoxed = redisTemplate.execute((RedisCallback<Long>) con -> con.bitCount(key.getBytes()));
             long count = countBoxed == null ? 0 : countBoxed;
@@ -166,9 +167,9 @@ public class DataService {
      */
     public long getTodayUV() {
         Calendar today = Calendar.getInstance();
-        Calendar lastDay = (Calendar)today.clone();
-        lastDay.add(Calendar.DATE, -1);
-        return calculateUV(lastDay.getTime(), today.getTime());
+//        Calendar lastDay = (Calendar)today.clone();
+//        lastDay.add(Calendar.DATE, -1);
+        return calculateUV(today.getTime(), today.getTime());
     }
 
     /**
@@ -176,8 +177,8 @@ public class DataService {
      */
     public long getTodayDAU() {
         Calendar today = Calendar.getInstance();
-        Calendar lastDay = (Calendar)today.clone();
-        lastDay.add(Calendar.DATE, -1);
-        return calculateDAU(lastDay.getTime(), today.getTime());
+//        Calendar lastDay = (Calendar)today.clone();
+//        lastDay.add(Calendar.DATE, -1);
+        return calculateDAU(today.getTime(), today.getTime());
     }
 }
