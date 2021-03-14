@@ -15,6 +15,8 @@ $(function (){
     $("#topBtn").click(postCtl("top"));
     $("#wonderfulBtn").click(postCtl("wonderful"));
     $("#deleteBtn").click(postCtl("delete"));
+    $("#cancelTopBtn").click(postCtl("cancelTop"));
+    $("#cancelWonderfulBtn").click(postCtl("cancelWonderful"));
 
     // 对帖子进行操作
     function postCtl(operation) {

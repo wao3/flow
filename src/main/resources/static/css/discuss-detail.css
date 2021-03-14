@@ -19,3 +19,11 @@
 	width: 100%;
 	height: 35px;
 }
+
+.op-btn {
+	border:none;
+}
+
+.op-btn[disabled] {
+	color: var(--color-fade);
+}

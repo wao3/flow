@@ -173,16 +173,23 @@ public class DiscussPostController implements CommunityConstant {
     // 置顶
     @PostMapping("/top")
     @ResponseBody
-    public String setTop(int id) {
-        discussPostService.updateType(id, 1);
+    public String setTop(Integer id) {
+        discussPostService.updateType(id, POST_TYPE_TOP);
 
         // 触发 elasticsearch 发帖事件
-        Event event = new Event()
-                .setTopic(TOPIC_PUBLISH)
-                .setUserId(hostHolder.getUser().getId())
-                .setEntityType(ENTITY_TYPE_POST)
-                .setEntityId(id);
-        eventProducer.fireEvent(event);
+        firePublish(id);
+
+        return CommunityUtil.getJSONString(0);
+    }
+
+    // 取消置顶
+    @PostMapping("/cancelTop")
+    @ResponseBody
+    public String cancelTop(Integer id) {
+        discussPostService.updateType(id, POST_TYPE_NORMAL);
+
+        // 触发 elasticsearch 发帖事件
+        firePublish(id);
 
         return CommunityUtil.getJSONString(0);
     }
@@ -190,16 +197,23 @@ public class DiscussPostController implements CommunityConstant {
     // 加精
     @PostMapping("/wonderful")
     @ResponseBody
-    public String setWonderful(int id) {
-        discussPostService.updateStatus(id, 1);
+    public String setWonderful(Integer id) {
+        discussPostService.updateStatus(id, POST_STATUS_HIGHLIGHT);
 
         // 触发 elasticsearch 发帖事件
-        Event event = new Event()
-                .setTopic(TOPIC_PUBLISH)
-                .setUserId(hostHolder.getUser().getId())
-                .setEntityType(ENTITY_TYPE_POST)
-                .setEntityId(id);
-        eventProducer.fireEvent(event);
+        firePublish(id);
+
+        return CommunityUtil.getJSONString(0);
+    }
+
+    // 取消加精
+    @PostMapping("/cancelWonderful")
+    @ResponseBody
+    public String cancelWonderful(Integer id) {
+        discussPostService.updateStatus(id, POST_STATUS_NORMAL);
+
+        // 触发 elasticsearch 发帖事件
+        firePublish(id);
 
         return CommunityUtil.getJSONString(0);
     }
@@ -207,7 +221,7 @@ public class DiscussPostController implements CommunityConstant {
     // 删除
     @PostMapping("/delete")
     @ResponseBody
-    public String setDelete(int id) {
+    public String setDelete(Integer id) {
         discussPostService.updateStatus(id, 2);
 
         // 触发 elasticsearch 删帖事件
@@ -219,5 +233,15 @@ public class DiscussPostController implements CommunityConstant {
         eventProducer.fireEvent(event);
 
         return CommunityUtil.getJSONString(0);
+    }
+
+    // 触发 elasticsearch 发帖事件
+    private void firePublish(Integer id) {
+        Event event = new Event()
+                .setTopic(TOPIC_PUBLISH)
+                .setUserId(hostHolder.getUser().getId())
+                .setEntityType(ENTITY_TYPE_POST)
+                .setEntityId(id);
+        eventProducer.fireEvent(event);
     }
 }

@@ -62,8 +62,26 @@
                             <b th:text="${likeStatus==1?'已赞':'点赞'}">赞</b> <i th:text="${likeCount}">11</i>
                         </div>
                         <div class="at-item" style="margin-left: auto">
-                            <img th:src="@{/img/report.svg}" src="" alt="">
-                            <span>举报</span>
+                            <i style="display: none" id="postId" th:data-id="${post.id}"></i>
+                            <button  sec:authorize="hasAnyAuthority('moderator','admin')" class="mr-2 c-gray op-btn" id="cancelTopBtn" th:if="${post.type == 1}">
+                                取消置顶
+                            </button>
+                            <button  sec:authorize="hasAnyAuthority('moderator','admin')" class="mr-2 c-gray op-btn" id="topBtn" th:if="${post.type == 0}">
+                                置顶
+                            </button>
+                            <button  sec:authorize="hasAnyAuthority('moderator','admin')" class="mr-2 c-gray op-btn" id="cancelWonderfulBtn" th:if="${post.status == 1}">
+                                取消加精
+                            </button>
+                            <button  sec:authorize="hasAnyAuthority('moderator','admin')" class="mr-2 c-gray op-btn" id="wonderfulBtn" th:if="${post.status == 0}">
+                                加精
+                            </button>
+                            <button  sec:authorize="hasAnyAuthority('moderator','admin')"     class="mr-2 c-gray op-btn" id="deleteBtn" th:if="${post.status != 2}">
+                                删除
+                            </button>
+                            <a>
+                                <img th:src="@{/img/report.svg}" src="" alt="">
+                                <span>举报</span>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -172,7 +190,7 @@
                                         <form method="post" th:action="@{|/comment/add/${post.id}|}">
                                             <div>
                                                 <input name="content" type="text" class="input-size reply-input"
-                                                       placeholder="请输入你的观点"/>
+                                                       placeholder="说点什么吧"/>
                                                 <input type="hidden" name="entityType" value="2">
                                                 <input type="hidden" name="entityId" th:value="${cvo.comment.id}">
                                             </div>
