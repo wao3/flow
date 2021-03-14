@@ -1,0 +1,33 @@
+.data-container > div > div {
+    color: var(--color-gray);
+}
+
+.data-container > div > .data {
+    font-size: 2em;
+    font-weight: 500;
+    color: #000;
+}
+
+.chart-box {
+    width: 100%;
+    height: 300px;
+}
+
+@media screen and (min-width: 576px) {
+    .data-container > div {
+        margin: 0 1rem;
+    }
+    .data-container > div:first-child {
+        margin-left: 0;
+    }
+    .data-container > div {
+        margin-right: 0;
+    }
+}
+
+@media screen and (max-width: 576px) {
+    .data-container > div {
+        margin: 0.5rem 0;
+    }
+}
+

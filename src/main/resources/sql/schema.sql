@@ -18,7 +18,8 @@ CREATE TABLE `user` (
     `create_time` timestamp NULL DEFAULT NOW(),
     PRIMARY KEY (`id`),
     KEY `index_username` (`username`(20)),
-    KEY `index_email` (`email`(20))
+    KEY `index_email` (`email`(20)),
+    KEY `create_time`(`create_time`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `message`;
@@ -65,7 +66,8 @@ create table `discuss_post` (
     `score` double default null,
     key `index_user_id` (`user_id`),
     key `node_id` (`node_id`),
-    key `type_and_create_time`(`type`, `create_time`)
+    key `type_and_create_time`(`type`, `create_time`),
+    KEY `create_time`(`create_time`)
 )engine = InnoDB default charset = utf8;
 
 DROP TABLE IF EXISTS `login_ticket`;

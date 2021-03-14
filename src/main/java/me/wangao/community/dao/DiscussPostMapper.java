@@ -3,6 +3,7 @@ package me.wangao.community.dao;
 import me.wangao.community.entity.DiscussPost;
 import org.apache.ibatis.annotations.*;
 
+import java.util.Date;
 import java.util.List;
 
 @Mapper
@@ -41,4 +42,8 @@ public interface DiscussPostMapper {
 
     @Update("update discuss_post set score = #{score} where id = #{id}")
     int updateScore(int id, double score);
+
+    @Select("select count(1) from discuss_post " +
+            "where create_time >= #{from} and create_time <= #{to}")
+    int selectRowsByDateRange(@Param("from") Date from, @Param("to") Date to);
 }

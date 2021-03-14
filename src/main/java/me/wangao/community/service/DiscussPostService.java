@@ -6,6 +6,7 @@ import com.github.benmanes.caffeine.cache.LoadingCache;
 import me.wangao.community.dao.DiscussPostMapper;
 import me.wangao.community.entity.DiscussPost;
 import me.wangao.community.util.CommunityConstant;
+import me.wangao.community.util.CommunityUtil;
 import me.wangao.community.util.RedisKeyUtil;
 import me.wangao.community.util.SensitiveFilter;
 import org.apache.commons.lang3.StringUtils;
@@ -20,6 +21,7 @@ import org.springframework.web.util.HtmlUtils;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -177,5 +179,12 @@ public class DiscussPostService implements CommunityConstant {
     
     public long findPostView(int postId) {
         return redisTemplate.opsForHash().increment(RedisKeyUtil.getPostViewCounterKey(), String.valueOf(postId), 1);
+    }
+
+    public int findTodayPostCount() {
+        Calendar todayCalendar = Calendar.getInstance();
+        Date todayStart = CommunityUtil.getDayStart(todayCalendar);
+        Date todayEnd = CommunityUtil.getDayEnd(todayCalendar);
+        return discussPostMapper.selectRowsByDateRange(todayStart, todayEnd);
     }
 }

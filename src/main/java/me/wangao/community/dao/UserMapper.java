@@ -2,6 +2,9 @@ package me.wangao.community.dao;
 
 import me.wangao.community.entity.User;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.Date;
 
 @Mapper
 public interface UserMapper {
@@ -21,4 +24,6 @@ public interface UserMapper {
     int updatePassword(int id, String password);
 
     int selectRows();
+
+    int selectRowsByDateRange(@Param("from") Date from, @Param("to") Date to);
 }

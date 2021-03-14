@@ -1,6 +1,5 @@
 package me.wangao.community.service;
 
-import me.wangao.community.dao.LoginTicketMapper;
 import me.wangao.community.dao.UserMapper;
 import me.wangao.community.entity.Event;
 import me.wangao.community.entity.LoginTicket;
@@ -257,5 +256,15 @@ public class UserService implements CommunityConstant {
         });
 
         return list;
+    }
+
+    /**
+     * @return 今日注册用户
+     */
+    public int findTodayRegisterCount() {
+        Calendar todayCalendar = Calendar.getInstance();
+        Date todayStart = CommunityUtil.getDayStart(todayCalendar);
+        Date todayEnd = CommunityUtil.getDayEnd(todayCalendar);
+        return userMapper.selectRowsByDateRange(todayStart, todayEnd);
     }
 }

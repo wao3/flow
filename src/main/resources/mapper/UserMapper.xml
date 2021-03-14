@@ -51,4 +51,9 @@
     <select id="selectRows" resultType="java.lang.Integer">
         select count(1) from user
     </select>
+
+    <select id="selectRowsByDateRange" resultType="java.lang.Integer">
+        select count(1) from user
+        where create_time &gt;= #{from} and create_time &lt;= #{to}
+    </select>
 </mapper>

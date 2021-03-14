@@ -4,6 +4,8 @@ import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.DigestUtils;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Map;
 import java.util.UUID;
 
@@ -40,5 +42,23 @@ public class CommunityUtil {
 
     public static String getJSONString(int code) {
         return getJSONString(code, null, null);
+    }
+
+    // 将日期转换为当日零点
+    public static Date getDayStart(Calendar calendar) {
+        calendar = (Calendar) calendar.clone();
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        return calendar.getTime();
+    }
+
+    // 将日期转换为当日23点59分59秒
+    public static Date getDayEnd(Calendar calendar) {
+        calendar = (Calendar) calendar.clone();
+        calendar.set(Calendar.HOUR_OF_DAY, 23);
+        calendar.set(Calendar.MINUTE, 59);
+        calendar.set(Calendar.SECOND, 59);
+        return calendar.getTime();
     }
 }
