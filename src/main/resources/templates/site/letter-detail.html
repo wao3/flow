@@ -32,7 +32,7 @@
 				<ul class="cell list-unstyled">
 					<li th:class="|media m-2 d-flex ${isMe ? 'flex-md-row-reverse': ''}|" th:each="map:${letters}" th:with="isMe = ${map.fromUser.username == loginUser.username}">
 						<a href="profile.html">
-							<img th:src="${map.fromUser.headerUrl}" class="mr-2 ml-2 rounded-circle user-header" alt="用户头像" >
+							<img th:src="${map.fromUser.headerUrl}" class="mr-2 ml-2 avatar" alt="用户头像" >
 						</a>
 						<div class="toast show d-lg-block" role="alert" aria-live="assertive" aria-atomic="true">
 							<div th:class="|toast-header d-flex justify-content-between ${isMe ? 'flex-md-row-reverse': ''}|">

@@ -4,7 +4,7 @@ $(function(){
 
 function follow() {
 	let btn = this;
-	if($(btn).hasClass("btn-info")) {
+	if($(btn).hasClass("btn-dark")) {
 		// 关注TA
 		$.post(CONTEXT_PATH + "/follow", { entityType: 3, entityId: $(btn).next().val() }, data => {
 			data = JSON.parse(data);

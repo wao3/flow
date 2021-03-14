@@ -50,19 +50,7 @@ public class HomeController implements CommunityConstant {
         List<Node> nodes = nodeService.findAllNodes();
         model.addAttribute("nodes", nodes);
 
-        setCounter(model, counterService);
-
         return "index";
-    }
-
-    /** 获取并设置侧边计数器 */
-    static void setCounter(Model model, CounterService counterService) {
-        int userCount = counterService.getUserCount();
-        int commentCount = counterService.getCommentCount();
-        int postCount = counterService.getPostCount();
-        model.addAttribute("userCount", userCount);
-        model.addAttribute("commentCount", commentCount);
-        model.addAttribute("postCount", postCount);
     }
 
     @GetMapping("/node/{id}")

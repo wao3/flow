@@ -1,10 +1,7 @@
 package me.wangao.community.controller.interceptor;
 
 import me.wangao.community.entity.User;
-import me.wangao.community.service.FollowService;
-import me.wangao.community.service.LikeService;
-import me.wangao.community.service.MessageService;
-import me.wangao.community.service.UserService;
+import me.wangao.community.service.*;
 import me.wangao.community.util.CommunityConstant;
 import me.wangao.community.util.HostHolder;
 import org.springframework.stereotype.Component;
@@ -30,11 +27,15 @@ public class MessageInterceptor implements HandlerInterceptor, CommunityConstant
     @Resource
     private FollowService followService;
 
+    @Resource
+    private CounterService counterService;
+
     @Override
     public void postHandle(HttpServletRequest req, HttpServletResponse res, Object handler, ModelAndView modelAndView) throws Exception {
         User user = hostHolder.getUser();
         if (user != null && modelAndView != null) {
             int userId = user.getId();
+            // 未读消息
             int letterUnreadCount = messageService.findLetterUnreadCount(userId, null);
             int noticeUnreadCount = messageService.findNoticeUnreadCount(userId, null);
             modelAndView.addObject("allUnreadCount", letterUnreadCount + noticeUnreadCount);
@@ -51,5 +52,16 @@ public class MessageInterceptor implements HandlerInterceptor, CommunityConstant
             long followerCount = followService.findFollowerCount(ENTITY_TYPE_USER, userId);
             modelAndView.addObject("myFollowerCount", followerCount);
         }
+
+        if (modelAndView != null) {
+            // 侧边计数器
+            int userCount = counterService.getUserCount();
+            int commentCount = counterService.getCommentCount();
+            int postCount = counterService.getPostCount();
+            modelAndView.addObject("userCount", userCount);
+            modelAndView.addObject("commentCount", commentCount);
+            modelAndView.addObject("postCount", postCount);
+        }
+
     }
 }

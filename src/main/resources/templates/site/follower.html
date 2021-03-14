@@ -31,25 +31,25 @@
 							</a>
 						</li>
 					</ul>
-					<a th:href="@{|/user/profile/${user.id}|}" class="text-muted position-absolute rt-0">返回个人主页&gt;</a>
+					<a th:href="@{|/user/profile/${user.id}|}" class="text-muted">返回个人主页&gt;</a>
 				</div>
 				
 				<!-- 粉丝列表 -->
 				<ul class="list-unstyled">
 					<li class="cell media border-bottom position-relative" th:each="map:${users}">
 						<a th:href="@{|/user/profile/${map.user.id}|}">
-							<img th:src="${map.user.headerUrl}" class="mr-4 rounded-circle user-header" alt="用户头像" >
+							<img th:src="${map.user.headerUrl}" class="mr-4 avatar" alt="用户头像" >
 						</a>
 						<div class="media-body">
 							<h6 class="mt-0 mb-3">
-								<span class="text-success" th:utext="${map.user.username}">落基山脉下的闲人</span>
+								<span class="c-gray" th:utext="${map.user.username}">落基山脉下的闲人</span>
 								<span class="float-right text-muted font-size-12">
 									关注于 <i th:text="${#dates.format(map.followTime, 'yyyy-MM-dd HH:mm:ss')}">2019-04-28 14:13:25</i>
 								</span>
 							</h6>
 							<div>
 								<button type="button"
-										th:class="|btn btn-sm float-right follow-btn ${map.hasFollowed?'btn-secondary':'btn-info'}|"
+										th:class="|btn btn-sm float-right follow-btn ${map.hasFollowed?'btn-secondary':'btn-dark'}|"
 										th:if="${loginUser != null && loginUser.id != map.user.id}"
 										th:text="${map.hasFollowed?'已关注':'关注TA'}">关注TA</button>
 								<input type="hidden" th:value="${map.user.id}">

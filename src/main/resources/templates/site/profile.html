@@ -38,7 +38,7 @@
 						<h5 class="mt-0">
 							<span th:utext="${user.username}">nowcoder</span>
 							<button type="button"
-									th:class="|btn btn-sm float-right  follow-btn ${hasFollowed?'btn-secondary':'btn-info'}|"
+									th:class="|btn btn-sm float-right  follow-btn ${hasFollowed?'btn-secondary':'btn-dark'}|"
 									th:if="${loginUser != null && loginUser.id != user.id}"
 									th:text="${hasFollowed?'已关注':'关注TA'}">关注TA</button>
 							<input type="hidden" id="entityId" th:value="${user.id}">

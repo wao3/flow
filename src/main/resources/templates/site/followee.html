@@ -38,7 +38,7 @@
 				<ul class="list-unstyled">
 					<li class="cell media border-bottom position-relative" th:each="map:${users}">
 						<a th:href="@{|/user/profile/${map.user.id}|}">
-							<img th:src="${map.user.headerUrl}" class="mr-4 rounded-circle user-header" alt="用户头像" >
+							<img th:src="${map.user.headerUrl}" class="mr-4 avatar" alt="用户头像" >
 						</a>
 						<div class="media-body">
 							<h6 class="mt-0 mb-3">
@@ -49,7 +49,7 @@
 							</h6>
 							<div>
 								<button type="button"
-										th:class="|btn btn-sm float-right follow-btn ${map.hasFollowed?'btn-secondary':'btn-info'}|"
+										th:class="|btn btn-sm float-right follow-btn ${map.hasFollowed?'btn-secondary':'btn-dark'}|"
 										th:if="${loginUser != null && loginUser.id != map.user.id}"
 										th:text="${map.hasFollowed?'已关注':'关注TA'}">关注TA</button>
 								<input type="hidden" th:value="${map.user.id}">
